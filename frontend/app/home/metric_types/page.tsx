@@ -59,7 +59,6 @@ const METRIC_TYPES = () => {
                                     )
                                 })
                             }
-
                         </tbody>
                     </table>
                 </div>

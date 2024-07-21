@@ -3,12 +3,17 @@ import React, { useEffect, useState, useRef } from 'react'
 import { LineChart, Line, CartesianGrid, YAxis, XAxis, Tooltip, Legend } from 'recharts';
 
 interface Metrics {
-    
+    id: number;
+    date_time: string;
+    serial_number_device: string;
+    id_location: number;
+    name_metric_type: number;
+    value: number;
 }
 
 const GRAPHIC_VIEWER = (props: any) => {
     const params = ['Temperatura', 'Temperatura de globo', 'Umidade', 'Velocidade do vento']
-    const [tableData, setTableData] = useState<any>();
+    const [tableData, setTableData] = useState<Metrics[]>();
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const activeParams = params.reduce((obj: any, param) => {
@@ -86,7 +91,8 @@ const GRAPHIC_VIEWER = (props: any) => {
                         })}
 
                     </LineChart>
-                </div>}
+                </div>
+            }
             <div className='flex flex-col md:flex-row text-center justify-center space-x-10'>
                 {
                     params.map((value, index) => <button className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded' key={index} onClick={() => { handleClick(value) }}>{value}</button>)

@@ -13,7 +13,7 @@ const Locations = () => {
   const [locations, setLocations] = useState<Location[]>([]);
   return (
     <div>
-
+      
     </div>
   )
 }
