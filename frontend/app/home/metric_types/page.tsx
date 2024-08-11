@@ -7,6 +7,22 @@ interface Metric {
     description: string;
 }
 
+
+const dummyMetrics: Metric[] = [
+    {
+        name: "Dummy Metric 1",
+        description: "This is dummy metric 1"
+    },
+    {
+        name: "Dummy Metric 2",
+        description: "This is dummy metric 2"
+    },
+    {
+        name: "Dummy Metric 3",
+        description: "This is dummy metric 3"
+    }
+];
+
 const fetchMetricTypes = async () => {
     var data;
     const metricTypesUrl = '/api/v1/metric_types';
@@ -19,19 +35,19 @@ const fetchMetricTypes = async () => {
     }
 }
 
-
 const METRIC_TYPES = () => {
     useEffect(() => {
         fetchMetricTypes()
     }, [])
-    const [metricTypes, setMetricTypes] = useState<Metric[]>([]);
+
+    const [metricTypes, setMetricTypes] = useState<Metric[]>(dummyMetrics);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
     return (
         <div className='flex min-h-screen min-w-screen justify-center items-center font-montserrat'>
             {isLoading && <Loading_animation />}
             {error && <div>Error loading data</div>}
-            {metricTypes.length == 0 ? <div>No metrics to show</div> :
+            {metricTypes.length === 0 ? <div>No metrics to show</div> :
                 <div className="relative overflow-x-auto rounded">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -45,20 +61,16 @@ const METRIC_TYPES = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                metricTypes.map((metricType: any) => {
-                                    return (
-                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {metricType.name}
-                                            </th>
-                                            <td className="px-6 py-4">
-                                                {metricType.description}
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
+                            {metricTypes.map((metricType: Metric, index: number) => (
+                                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {metricType.name}
+                                    </th>
+                                    <td className="px-6 py-4">
+                                        {metricType.description}
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
