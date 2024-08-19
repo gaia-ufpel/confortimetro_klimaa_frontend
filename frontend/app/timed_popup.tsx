@@ -4,17 +4,15 @@ interface TimedPopupProps {
     title: string;
     message: string;
     className?: string;
-    setErrorMessage: (message: string) => void;
 }
 
-const TimedPopup: React.FC<TimedPopupProps> = ({ title, message, className, setErrorMessage}) => {
+const TimedPopup: React.FC<TimedPopupProps> = ({ title, message, className }) => {
     const [showPopup, setShowPopup] = useState(true);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowPopup(false);
-            setErrorMessage('');
-        }, 5000); // Duração em milissegundos
+        }, 5000);
 
         return () => {
             clearTimeout(timer);

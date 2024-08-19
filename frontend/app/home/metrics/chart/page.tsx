@@ -33,7 +33,7 @@ const metricDataDummy: Metrics[] = [
 
 const GRAPHIC_VIEWER = (props: any) => {
     const params = ['Temperatura', 'Temperatura de globo', 'Umidade', 'Velocidade do vento']
-    const [requestedData, setRequestedData] = useState<any>(metricDataDummy);
+    const [requestedData, setRequestedData] = useState<Metrics[]>(metricDataDummy);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const activeParams = params.reduce((obj: any, param) => {
@@ -86,7 +86,7 @@ const GRAPHIC_VIEWER = (props: any) => {
 
             {isLoading && <Loading_animation />}
 
-            {error && <TimedPopup title={"OOPS, something went wrong..."} message={error} className={"absolute right-0 bottom-0 m-4 text-2xl font-bold font-montserrat text-center"} setErrorMessage={setError} />}
+            {error && <TimedPopup title={"OOPS, something went wrong..."} message={error} className={"absolute right-0 bottom-0 m-4 text-2xl font-bold font-montserrat text-center"} />}
             {requestedData && (
                 <div className='flex justify-center items-center m-10 bg-slate-200 rounded-md'>
                     <LineChart
