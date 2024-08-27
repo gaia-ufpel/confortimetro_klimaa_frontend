@@ -1,4 +1,0 @@
-pymodbus
-psycopg
-toml
-pyModbusTCP

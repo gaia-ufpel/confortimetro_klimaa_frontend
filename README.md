@@ -1,5 +1,9 @@
-# Confortímetro Klimma
+O que há até então:
 
-Projeto em desenvolvimento na Universidade Federal de Pelotas
+-login, cadastro (falta gerenciar autenticação com os tokens)
+-páginas: de dispositivos, localidades registradas(falta terminar), tipos de métricas, visualização de métricas(falta arrumar os gráficos, usei o recharts)
 
-Em parceria com: Gebras
+
+-falta logout
+-falta página do usuário
+-falta as páginas extendidas para administradores, ex: para registrar métricas, dispositivos e localidades manualmente, etc.
