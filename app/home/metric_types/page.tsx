@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import Loading_animation from '../../loading_animation';
+import api from '@/app/api';
 
 interface Metric {
     name: string;
@@ -8,46 +9,44 @@ interface Metric {
 }
 
 
-const dummyMetrics: Metric[] = [
-    {
-        name: "Dummy Metric 1",
-        description: "This is dummy metric 1"
-    },
-    {
-        name: "Dummy Metric 2",
-        description: "This is dummy metric 2"
-    },
-    {
-        name: "Dummy Metric 3",
-        description: "This is dummy metric 3"
-    }
-];
-
-const fetchMetricTypes = async () => {
-    var data;
-    const metricTypesUrl = '/api/v1/metric_types';
-    try {
-        data = await fetch(`${metricTypesUrl}`, { method: 'GET' })
-        const metricTypesData = (await data.json())
-        console.log(metricTypesData)
-    } catch (e: any) {
-        console.log(e)
-    }
-}
-
 const METRIC_TYPES = () => {
     useEffect(() => {
         fetchMetricTypes()
     }, [])
-
-    const [metricTypes, setMetricTypes] = useState<Metric[]>(dummyMetrics);
+    
+    const [metricTypes, setMetricTypes] = useState<Metric[] | null>();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
+    
+    const fetchMetricTypes = async () => {
+        const metricTypesUrl = `${api.defaults.baseURL}/metric-type/`;
+        try {
+            const token = localStorage.getItem('token'); // Obtém o token do localStorage
+            const response = await fetch(metricTypesUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Adiciona o Bearer Token no cabeçalho
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`);
+            }
+    
+            const metricTypesData = await response.json();
+            setMetricTypes(metricTypesData);
+        } catch (e: any) {
+            console.log(e);
+        }
+    };
+    
+    
     return (
         <div className='flex min-h-screen min-w-screen justify-center items-center font-montserrat'>
             {isLoading && <Loading_animation />}
             {error && <div>Error loading data</div>}
-            {metricTypes.length === 0 ? <div>No metrics to show</div> :
+            {metricTypes == null ? <div className='font-sans text-2xl'>No metrics to show</div> :
                 <div className="relative overflow-x-auto rounded">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
