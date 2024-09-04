@@ -8,10 +8,17 @@ import { TbActivityHeartbeat } from "react-icons/tb";
 import { FaTowerBroadcast } from "react-icons/fa6"; import { MdLogout } from "react-icons/md";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { IoLocationSharp } from "react-icons/io5";
+import { navigate } from "../login/actions";
+
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     let pathname = usePathname();
     const [openNavbar, setOpenNavbar] = useState(true);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // Remove o token do localStorage
+        navigate('/login'); // Redireciona para a página de login
+    };
     return (
         <div className='relative min-h-screen min-w-screen bg-gradient-to-b from-[#41D271] to-[#BD95EB]'>
             {children}
@@ -42,7 +49,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         </button>
                     </Link>
                 </div>
-                <button className="">
+                <button className="" onClick={handleLogout}>
                     <MdLogout />
                 </button>
             </nav>

@@ -1,12 +1,8 @@
-import React from 'react'
+import { redirect } from 'next/navigation';
 
 
 const page = () => {
-  return (
-    <div className='min-h-[100vh] min-w-[100vw]'>
-      ESTA È A PAGINA INICIAL
-    </div>
-  )
+  redirect('/login')
 }
 
 export default page

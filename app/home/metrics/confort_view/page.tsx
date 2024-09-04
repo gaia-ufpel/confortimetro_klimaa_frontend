@@ -11,7 +11,7 @@ const CONFORT_VIEW = (props: any) => {
 
     return (
         <div className='relative flex flex-col'>
-            <DATE_CONTROL date={date} setDate={setDate} signalToMetrics={signalToMetrics} setSignalToMetrics={setSignalToMetrics} />
+            { /* <DATE_CONTROL date={date} setDate={setDate} signalToMetrics={signalToMetrics} setSignalToMetrics={setSignalToMetrics} /> */}
             <GRAPHIC_VIEWER date={date} signalToMetrics={signalToMetrics} setSignalToMetrics={setSignalToMetrics}></GRAPHIC_VIEWER>
         </div>
     )

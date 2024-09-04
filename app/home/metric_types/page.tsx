@@ -1,51 +1,18 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import Loading_animation from '../../loading_animation';
-import api from '@/app/api';
-
-interface Metric {
-    name: string;
-    description: string;
-}
+import React, { useState, useEffect } from 'react';
+import { fetchMetricTypes } from '../../../lib/shared_fetchers';
+import { Metric } from '../../../lib/types';
 
 
 const METRIC_TYPES = () => {
     useEffect(() => {
-        fetchMetricTypes()
+        fetchMetricTypes().then(data => setMetricTypes(data))
     }, [])
     
     const [metricTypes, setMetricTypes] = useState<Metric[] | null>();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(false);
-    
-    const fetchMetricTypes = async () => {
-        const metricTypesUrl = `${api.defaults.baseURL}/metric-type/`;
-        try {
-            const token = localStorage.getItem('token'); // Obtém o token do localStorage
-            const response = await fetch(metricTypesUrl, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`, // Adiciona o Bearer Token no cabeçalho
-                    'Content-Type': 'application/json',
-                },
-            });
-    
-            if (!response.ok) {
-                throw new Error(`Erro na requisição: ${response.status}`);
-            }
-    
-            const metricTypesData = await response.json();
-            setMetricTypes(metricTypesData);
-        } catch (e: any) {
-            console.log(e);
-        }
-    };
-    
     
     return (
         <div className='flex min-h-screen min-w-screen justify-center items-center font-montserrat'>
-            {isLoading && <Loading_animation />}
-            {error && <div>Error loading data</div>}
             {metricTypes == null ? <div className='font-sans text-2xl'>No metrics to show</div> :
                 <div className="relative overflow-x-auto rounded">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
