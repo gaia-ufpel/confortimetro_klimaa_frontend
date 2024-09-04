@@ -14,8 +14,8 @@ import { navigate } from './actions';
 const LOGIN = () => {
   const pathname = usePathname()
   const [credentials, setCredentials] = useState({
-    email: 'testuser@example.com',
-    password: 'XWC3I5vbA#hCJ0f'
+    email: '',
+    password: ''
   })
   const [loginError, setLoginError] = useState<string>('')
 

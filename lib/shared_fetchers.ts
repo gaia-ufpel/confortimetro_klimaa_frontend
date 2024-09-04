@@ -3,7 +3,6 @@ import { useRef } from "react";
 import { Metrics } from "@/lib/types";
 import { Device } from "@/lib/types";
 
-
 export const fetchMetricTypes = async () => {
     const metricTypesUrl = `${api.defaults.baseURL}/metric-type/`;
     try {
@@ -11,7 +10,7 @@ export const fetchMetricTypes = async () => {
         const response = await fetch(metricTypesUrl, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`, 
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -46,8 +45,28 @@ export const getMetrics = async () => {
     }
 }
 
-export const getDevices = async (id:string | null) => {
-    const devicesurl = `${api.defaults.baseURL}/device/${id != null ? id+'/' : ''}`;
+export const getMetricsByDeviceId = async (DeviceId: number) => {
+
+    let metricsURL = `${api.defaults.baseURL}/metric/search?device_id=${DeviceId}`;
+    try {
+        const token = localStorage.getItem('token');
+        const metrics = await fetch(`${metricsURL}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'accept': '*/*',
+            }
+        })
+        const metricsData = await metrics.json()
+        return metricsData;
+    } catch (e: any) {
+        console.log(e);
+    }
+}
+
+export const getDevices = async () => {
+    const devicesurl = `${api.defaults.baseURL}/device/}`;
 
     try {
         const token = localStorage.getItem('token');
@@ -69,23 +88,23 @@ export const getDevices = async (id:string | null) => {
 export const fetchLocations = async () => {
     const locationsUrl = `${api.defaults.baseURL}/location/`;
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(locationsUrl, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          'accept': '*/*',
-        },
-      });
+        const token = localStorage.getItem('token');
+        const response = await fetch(locationsUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'accept': '*/*',
+            },
+        });
 
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status}`);
-      }
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
 
-      const locationsData = await response.json();
-      return locationsData;
+        const locationsData = await response.json();
+        return locationsData;
     } catch (e: any) {
-      console.log(e);
+        console.log(e);
     }
-  };
+};

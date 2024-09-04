@@ -29,9 +29,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
                 <div className="flex flex-col items-center space-y-2">
                     <Link href="/home/metrics">
-                        <button className="p-2 border-2 hover:border-black rounded border-transparent transition duration-300" title="metrics">
+                        {/*<button className="p-2 border-2 hover:border-black rounded border-transparent transition duration-300" title="metrics">
                             <TbActivityHeartbeat />
-                        </button>
+                        </button>*/}
                     </Link>
                     <Link href="/home/metric_types">
                         <button className="p-2 border-2 hover:border-black rounded border-transparent transition duration-300" title="metric types">

@@ -17,9 +17,9 @@ function separateMetricsByDeviceAndMetricType(metrics: Metrics[]): { [key: numbe
         return acc;
     }, {} as { [key: number]: { [key: number]: Metrics[] } });
 }
-
+//generateSensorData(new Date('2023-09-03T03:00:00'), 2)
 const GRAPHIC_VIEWER = (props: any) => {
-    const [requestedData, setRequestedData] = useState<Metrics[] | null>(generateSensorData(new Date('2023-09-03T03:00:00'), 2));
+    const [requestedData, setRequestedData] = useState<Metrics[] | null>(null);
     const [perDeviceAndMetricData, setPerDeviceAndMetricData] = useState<{ [key: number]: { [key: number]: Metrics[] } } | null>(null);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const GRAPHIC_VIEWER = (props: any) => {
                     const metricsByType = perDeviceAndMetricData[Number(deviceId)];
 
                     return (
-                        <div key={deviceId} className='flex flex-col justify-center items-center m-10 bg-slate-200 rounded-md'>
+                        <div style={{ width: '100%', height: '100%'}} key={deviceId} className='flex flex-col justify-center items-center m-10 bg-slate-200 rounded-md'>
                             <h2 className='text-xl font-bold mb-4'>Device {deviceId}</h2>
                             <LineChart
                                 width={screen.width * 0.7}
