@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, CartesianGrid, YAxis, XAxis, Tooltip, Legend } from 'recharts';
 import { getMetrics } from '@/lib/shared_fetchers';
@@ -34,7 +35,7 @@ const GRAPHIC_VIEWER = (props: any) => {
                 <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">GET METRICS (ALL OF ALL OF ALL)</p>
             </button>
 
-            {perDeviceAndMetricData && (
+            {/*perDeviceAndMetricData && (
                 Object.keys(perDeviceAndMetricData).map(deviceId => {
                     const metricsByType = perDeviceAndMetricData[Number(deviceId)];
 
@@ -66,7 +67,7 @@ const GRAPHIC_VIEWER = (props: any) => {
                         </div>
                     );
                 })
-            )}
+            )*/}
         </div>
     )
 }

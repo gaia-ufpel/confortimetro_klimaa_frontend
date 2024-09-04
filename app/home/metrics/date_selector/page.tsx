@@ -1,12 +1,13 @@
+"use client";
 import React, { useState, useEffect } from 'react'
 import Date_selector from './date_selector'
 
 const DATE_CONTROL = (props: any) => {
     const [toggleWarningPeriod, setToggleWarningPeriod] = useState(false)
 
-    useEffect(() => {
-        evaluatePeriod(props.date.start_datetime, props.date.end_datetime)
-    }, [props.date.start_datetime, props.date.end_datetime])
+    //useEffect(() => {
+    //    evaluatePeriod(props.date.start_datetime, props.date.end_datetime)
+    //}, [props.date.start_datetime, props.date.end_datetime])
 
     const evaluatePeriod = (start_datetime: string, end_datetime: string) => {
         let currentDate = new Date(getTodayDateFormat())
@@ -49,10 +50,10 @@ const DATE_CONTROL = (props: any) => {
                 <Date_selector id={'start_datetime'} setDate={props.setDate} text="Data de início:" date={props.date} />
                 <Date_selector id={'end_datetime'} setDate={props.setDate} text="Data de fim:" date={props.date} />
             </div>
-            <div className='relative flex flex-col items-center text-center'>
+            {/*<div className='relative flex flex-col items-center text-center'>
                 <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded" onClick={() => { if (props.date.valid == true) { props.setSignalToMetrics(true)} }}>Monitorar</button>
                 {props.date.valid ? '' : <p className='absolute translate-y-10 float-end text-red-500 font-bold px-4 py-2 rounded-md animate-pulse'>Invalid period</p>}
-            </div>
+            </div> */}
         </div>
     )
 }
