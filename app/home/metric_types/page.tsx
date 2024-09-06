@@ -16,8 +16,11 @@ const METRIC_TYPES = () => {
             {metricTypes == null ? <div className='font-sans text-2xl'>No metrics to show</div> :
                 <div className="relative overflow-x-auto rounded">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <thead className="text-xl text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
+                                <th scope="col" className="px-6 py-3">
+                                    ID
+                                </th>
                                 <th scope="col" className="px-6 py-3">
                                     Metric
                                 </th>
@@ -28,14 +31,19 @@ const METRIC_TYPES = () => {
                         </thead>
                         <tbody>
                             {metricTypes.map((metricType: Metric, index: number) => (
-                                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <tr key={index} className="text-center bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {metricType.name}
-                                        ID: {metricType.id}
+                                        {metricType.id}
                                     </th>
+
+                                    <td className="px-6 py-4">
+                                        {metricType.name}
+                                    </td>
+
                                     <td className="px-6 py-4">
                                         {metricType.description}
                                     </td>
+
                                 </tr>
                             ))}
                         </tbody>

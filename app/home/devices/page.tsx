@@ -77,7 +77,6 @@ export default function DEVICES() {
                     )
                 }
             </div>
-            )
         </div>
     )
 }

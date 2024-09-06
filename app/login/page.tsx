@@ -14,8 +14,8 @@ import { navigate } from './actions';
 const LOGIN = () => {
   const pathname = usePathname()
   const [credentials, setCredentials] = useState({
-    email: 'testuser@example.com',
-    password: 'XWC3I5vbA#hCJ0f'
+    email: '',
+    password: ''
   })
   const [loginError, setLoginError] = useState<string>('')
 
@@ -27,8 +27,11 @@ const LOGIN = () => {
           'accept': '*/*',
         }
       });
-      localStorage.setItem('token', response.data.token);
-      api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+      const data = JSON.parse(response.data);
+      const token = data.Authorization.split(' ')[1]; // Para separar só o token de `Bearer {token}`
+      localStorage.setItem('token', token);
+      api.defaults.headers.Authorization = token;
+      //api.defaults.headers.Authorization = `${data.Authorization}`;
 
       navigate('/home');
 

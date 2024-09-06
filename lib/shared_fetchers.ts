@@ -1,7 +1,4 @@
 import api from "../app/api";
-import { useRef } from "react";
-import { Metrics } from "@/lib/types";
-import { Device } from "@/lib/types";
 
 export const fetchMetricTypes = async () => {
     try {
@@ -18,7 +15,6 @@ export const fetchMetricTypes = async () => {
             throw new Error(`Erro na requisição: ${response.status}`);
         }
         const metricTypesData = response.data;
-        console.log(metricTypesData);
         return metricTypesData;
     } catch (e: any) {
         console.log(e);
@@ -45,19 +41,15 @@ export const getMetrics = async () => {
 }
 
 export const getMetricsByDeviceId = async (DeviceId: number) => {
-
-    let metricsURL = `${api.defaults.baseURL}/metric/search?device_id=${DeviceId}`;
     try {
-        const token = localStorage.getItem('token');
-        const metrics = await fetch(`${metricsURL}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
+        const metrics = await api.get(`/metric/search?device_id=${DeviceId}`, {
+            headers:
+            {
                 'Content-Type': 'application/json',
                 'accept': '*/*',
             }
         })
-        const metricsData = await metrics.json()
+        const metricsData = await metrics.data
         return metricsData;
     } catch (e: any) {
         console.log(e);
@@ -65,20 +57,16 @@ export const getMetricsByDeviceId = async (DeviceId: number) => {
 }
 
 export const getDevices = async () => {
-    const devicesurl = `${api.defaults.baseURL}/device`;
-
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(devicesurl, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
+        const response = await api.get(`/device`, {
+            headers:
+            {
                 'Content-Type': 'application/json',
                 'Accept': '*/*',
             },
         });
-        console.log(response)
-        const devices = await response.json()
+
+        const devices = await response.data
         return devices
     } catch (e: any) {
         console.log(e)
@@ -86,23 +74,16 @@ export const getDevices = async () => {
 }
 
 export const fetchLocations = async () => {
-    const locationsUrl = `${api.defaults.baseURL}/location/`;
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(locationsUrl, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
+        const response = await api.get(`/location`, {
+            headers:
+            {
                 'Content-Type': 'application/json',
                 'accept': '*/*',
             },
         });
 
-        if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.status}`);
-        }
-
-        const locationsData = await response.json();
+        const locationsData = await response.data;
         return locationsData;
     } catch (e: any) {
         console.log(e);
