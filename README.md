@@ -1,9 +1,5 @@
-O que há até então:
+O que falta:
 
--login, cadastro (falta gerenciar autenticação com os tokens)
--páginas: de dispositivos, localidades registradas(falta terminar), tipos de métricas, visualização de métricas(falta arrumar os gráficos, usei o recharts)
+-cadastro
 
-
--falta logout
--falta página do usuário
--falta as páginas extendidas para administradores, ex: para registrar métricas, dispositivos e localidades manualmente, etc.
+-falta as páginas extendidas para administradores.
