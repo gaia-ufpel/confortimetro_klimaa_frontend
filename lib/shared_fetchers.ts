@@ -4,22 +4,21 @@ import { Metrics } from "@/lib/types";
 import { Device } from "@/lib/types";
 
 export const fetchMetricTypes = async () => {
-    const metricTypesUrl = `${api.defaults.baseURL}/metric-type/`;
     try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(metricTypesUrl, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await api.get(`/metric-type`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accept': '*/*',
+                }
+            }
+        );
 
-        if (!response.ok) {
+        if (response.status !== 200) {
             throw new Error(`Erro na requisição: ${response.status}`);
         }
-
-        const metricTypesData = await response.json();
+        const metricTypesData = response.data;
+        console.log(metricTypesData);
         return metricTypesData;
     } catch (e: any) {
         console.log(e);
@@ -66,7 +65,7 @@ export const getMetricsByDeviceId = async (DeviceId: number) => {
 }
 
 export const getDevices = async () => {
-    const devicesurl = `${api.defaults.baseURL}/device/}`;
+    const devicesurl = `${api.defaults.baseURL}/device`;
 
     try {
         const token = localStorage.getItem('token');
@@ -78,6 +77,7 @@ export const getDevices = async () => {
                 'Accept': '*/*',
             },
         });
+        console.log(response)
         const devices = await response.json()
         return devices
     } catch (e: any) {
