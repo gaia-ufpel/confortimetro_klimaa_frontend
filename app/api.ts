@@ -1,11 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://klimaa.glbessa.dev.br:51625',
+  baseURL: 'https://klimaa2.glbessa.dev.br',
   timeout: 10000,
 });
-
-
 
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('token');

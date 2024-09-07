@@ -5,11 +5,11 @@ export const signupSchema = z.object({
   email: z.string().email("E-mail inválido"),
   password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
   confirmpassword: z.string(),
+  class: z.enum(["estudante", "professor", "comunidade externa"]),
 }).refine(data => data.password === data.confirmpassword, {
   message: 'As senhas não coincidem',
   path: ['confirmpassword'],
 });
-
 
 export type TsignupSchema = z.infer<typeof signupSchema>;
 

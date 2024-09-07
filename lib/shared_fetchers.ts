@@ -22,18 +22,15 @@ export const fetchMetricTypes = async () => {
 };
 
 export const getMetrics = async () => {
-    let metricsURL = `${api.defaults.baseURL}/metric/`;
     try {
-        const token = localStorage.getItem('token');
-        const metrics = await fetch(`${metricsURL}`, {
+        const metrics = await api.get(`/metric/`, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
                 'accept': '*/*',
             }
         })
-        const metricsData = await metrics.json()
+        const metricsData = await metrics.data
         return metricsData;
     } catch (e: any) {
         console.log(e);

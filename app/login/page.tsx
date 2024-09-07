@@ -18,6 +18,7 @@ const LOGIN = () => {
     password: ''
   })
   const [loginError, setLoginError] = useState<string>('')
+  const [loginSucess, setLoginSucess] = useState<boolean>(false)
 
   const login = async () => {
     try {
@@ -31,9 +32,12 @@ const LOGIN = () => {
       const token = data.Authorization.split(' ')[1]; // Para separar só o token de `Bearer {token}`
       localStorage.setItem('token', token);
       api.defaults.headers.Authorization = token;
-      //api.defaults.headers.Authorization = `${data.Authorization}`;
 
-      navigate('/home');
+      setLoginSucess(true);
+      setInterval(() => {
+        setLoginSucess(false);
+        navigate('/home');
+      }, 3000);
 
     } catch (error: any) {
       setLoginError(String(error.message) || 'Erro desconhecido');
@@ -42,7 +46,7 @@ const LOGIN = () => {
   };
 
   return (
-    <div className='flex flex-col justify-center items-center font-montserrat min-h-screen'>
+    <div className='relative flex flex-col justify-center items-center font-montserrat min-h-screen'>
       {loginError && <TimedPopup title={"Login Error"} message={loginError} className={"absolute right-0 bottom-0 m-4 text-2xl font-bold font-montserrat text-center"} />}
 
       <form className='flex flex-col space-y-4 justify-center items-center p-10'>
@@ -59,6 +63,14 @@ const LOGIN = () => {
           <button className='absolute right-0 bottom-0 text-zinc-100 text-base font-semibold tracking-[0] hover:underline hover:decoration-solid'> Esqueci minha senha</button>
         </div>
         <button type="button" className='px-10 py-2 rounded-xl text-neutral-50 bg-[#885AC6] hover:bg-[#926ec2] shadow-md border-2 border-green-300 font-extrabold text-2xl' onClick={login}> Entrar </button>
+        {
+          loginSucess
+          &&
+          <div className='absolute flex text-center items-center space-x-2 bottom-2'>
+            <div className='relative font-sans font-bold text-[#fdfdfd]'>Login Bem Sucedido! Redirecionando...</div>
+            <GrValidate className='relative text-[#28f451] text-2xl'></GrValidate>
+          </div>
+        }
       </form>
       <div className='flex flex-col space-y-10'>
         <div className='text-zinc-100 text-base font-semibold pointer-events-none'>Ainda não possui uma conta?</div>
