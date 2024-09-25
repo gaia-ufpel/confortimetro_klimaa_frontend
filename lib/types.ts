@@ -3,9 +3,14 @@ import { z } from 'zod';
 export const signupSchema = z.object({
   name: z.string().max(50, "Nome deve ter no máximo 50 caracteres"),
   email: z.string().email("E-mail inválido"),
-  password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+  password: z.string()
+    .min(6, "Senha deve ter no mínimo 6 caracteres")
+    .regex(/[a-z]/, "Senha deve conter pelo menos uma letra minúscula")
+    .regex(/[A-Z]/, "Senha deve conter pelo menos uma letra maiúscula")
+    .regex(/\d/, "Senha deve conter pelo menos um dígito")
+    .regex(/[^a-zA-Z0-9]/, "Senha deve conter pelo menos um caractere especial"),
   confirmpassword: z.string(),
-  class: z.enum(["estudante", "professor", "comunidade externa"]),
+  group: z.enum(["student", "professor", "external community"]),
 }).refine(data => data.password === data.confirmpassword, {
   message: 'As senhas não coincidem',
   path: ['confirmpassword'],
