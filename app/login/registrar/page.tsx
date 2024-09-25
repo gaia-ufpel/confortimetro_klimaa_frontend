@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MdLock } from 'react-icons/md';
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -7,24 +7,30 @@ import { useForm } from 'react-hook-form';
 import { signupSchema, TsignupSchema } from '@/lib/types';
 import api from '@/app/api';
 import { navigate } from '@/app/login/actions';
+import { RiRadarFill } from 'react-icons/ri';
 
-const fetchRegister = async (signUp: TsignupSchema) => {
-    try {
-        const response = await api.post(`/auth/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'accept': '*/*',
-            },
-            body: JSON.stringify(signUp)
-        });
-        navigate('/home');
-    } catch (error: any) {
-        console.error('Erro:', error);
-    }
-}
 
 const REGISTRAR = () => {
+    const [isRegisterSuccessfully, setIsRegisterSuccessfully] = useState<boolean>(false);
+    const fetchRegister = async (signUp: Omit<TsignupSchema, 'confirmpassword'>) => {
+        try {
+            const response = await api.post(`/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accept': '*/*',
+                },
+                body: JSON.stringify(signUp)
+            });
+            setIsRegisterSuccessfully(true);
+            setInterval(() => {
+                setIsRegisterSuccessfully(false);
+                navigate('/login');
+            }, 3000);
+        } catch (error: any) {
+            console.error('Erro:', error);
+        }
+    }
     const {
         register,
         handleSubmit,
@@ -36,8 +42,8 @@ const REGISTRAR = () => {
 
 
     const onSubmit = async (data: TsignupSchema) => {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log(data);
+        const { confirmpassword, ...signUpData } = data;
+        await fetchRegister(signUpData);
     }
 
     return (
@@ -72,16 +78,15 @@ const REGISTRAR = () => {
                     </div>
                     <div className='relative space-y-1'>
                         <label className='block text-neutral-700 text-xl md:text-[24px] font-normal pl-3 font-montserrat'>Classe</label>
-                        <select className={`pl-8 md:pr-10 w-96 md:w-[710px] h-12 md:h-16 bg-zinc-300 rounded-xl md:rounded-3xl shadow-[0px_4px_4px_#00000040] outline-none ${errors.class ? "border-red-500" : ""}`} {...register('class', { required: true })} disabled={isSubmitting}>
-                            <option value="">Selecione uma classe</option>
-                            <option value="estudante">Estudante</option>
+                        <select className={`pl-8 md:pr-10 w-96 md:w-[710px] h-12 md:h-16 bg-zinc-300 rounded-xl md:rounded-3xl shadow-[0px_4px_4px_#00000040] outline-none ${errors.group ? "border-red-500" : ""}`} {...register('group', { required: true })} disabled={isSubmitting}>
+                            <option value="student">Estudante</option>
                             <option value="professor">Professor</option>
-                            <option value="comunidade_externa">Comunidade Externa</option>
+                            <option value="external community">Comunidade Externa</option>
                         </select>
-                        {errors.class && (<p className='absolute font-semibold text-red-500 right-4'>{`${errors.class.message}`}</p>)}
+                        {errors.group && (<p className='absolute font-semibold text-red-500 right-4'>{`${errors.group.message}`}</p>)}
                     </div>
                 </div>
-                <button type="submit" className={`block text-center mt-20 md:mt-40 font-montserrat h-12 px-10 py-2 bg-[#78DF8C] opacity-75 text-neutral-50 text-xl font-semibold rounded-3xl border-2 border-violet-500 shadow-lg hover:opacity-100 duration-200 disabled:pointer-events-none`}>Crie uma conta</button>
+                <button type="submit" className={`block text-center mt-20 md:mt-40 font-montserrat h-12 px-10 py-2 bg-[#78DF8C] opacity-75 text-neutral-50 text-xl font-semibold rounded-3xl border-2 border-violet-500 shadow-lg hover:opacity-100 duration-200 disabled:pointer-events-none`} disabled={(isSubmitting || isRegisterSuccessfully)}>Crie uma conta</button>
             </form>
             <Image src="/register.png" width={250} height={250} alt='register image' className='md:absolute md:left-10 md:bottom-10' />
         </div>
