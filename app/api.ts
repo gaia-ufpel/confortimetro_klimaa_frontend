@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://klimaa2.glbessa.dev.br',
+  baseURL: 'https://klimaa.glbessa.dev.br:51625',
   timeout: 10000,
 });
 
