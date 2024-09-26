@@ -7,20 +7,18 @@ import { useForm } from 'react-hook-form';
 import { signupSchema, TsignupSchema } from '@/lib/types';
 import api from '@/app/api';
 import { navigate } from '@/app/login/actions';
-import { RiRadarFill } from 'react-icons/ri';
+import { GrValidate } from "react-icons/gr";
 
 
 const REGISTRAR = () => {
     const [isRegisterSuccessfully, setIsRegisterSuccessfully] = useState<boolean>(false);
     const fetchRegister = async (signUp: Omit<TsignupSchema, 'confirmpassword'>) => {
         try {
-            const response = await api.post(`/auth/register`, {
-                method: 'POST',
+            const response = await api.post(`/auth/register`, JSON.stringify(signUp), {
                 headers: {
                     'Content-Type': 'application/json',
                     'accept': '*/*',
                 },
-                body: JSON.stringify(signUp)
             });
             setIsRegisterSuccessfully(true);
             setInterval(() => {
@@ -87,6 +85,14 @@ const REGISTRAR = () => {
                     </div>
                 </div>
                 <button type="submit" className={`block text-center mt-20 md:mt-40 font-montserrat h-12 px-10 py-2 bg-[#78DF8C] opacity-75 text-neutral-50 text-xl font-semibold rounded-3xl border-2 border-violet-500 shadow-lg hover:opacity-100 duration-200 disabled:pointer-events-none`} disabled={(isSubmitting || isRegisterSuccessfully)}>Crie uma conta</button>
+                {   isRegisterSuccessfully &&
+                    <div className='relative flex my-4 justify-center items-center space-x-2'>
+                        <p className='text-center font-sans font-bold text-[#fdfdfd]'>
+                            Usuário registrado com sucesso...
+                        </p>
+                        <GrValidate className='text-[#28f451] text-2xl'></GrValidate>
+                    </div>
+                }
             </form>
             <Image src="/register.png" width={250} height={250} alt='register image' className='md:absolute md:left-10 md:bottom-10' />
         </div>
