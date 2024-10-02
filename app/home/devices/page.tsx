@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { getDevices, getMetricsByDeviceId } from '@/lib/shared_fetchers';
 import { Device, Metrics } from '@/lib/types';
 import { LineChart, Line, CartesianGrid, YAxis, XAxis, Tooltip, Legend } from 'recharts';
@@ -8,6 +10,7 @@ export default function DEVICES() {
     const [devices, setDevices] = useState<Device[] | null>()
     const [selectedDevice, setSelectedDevice] = useState<Device | null>();
     const [deviceMetrics, setDeviceMetrics] = useState<Metrics[] | null>(null);
+    const pathname = usePathname();
 
     useEffect(() => {
         if (selectedDevice) {
@@ -25,10 +28,16 @@ export default function DEVICES() {
 
     return (
         <div className='relative flex justify-center min-h-screen items-center'>
-
-            <button className='absolute top-0 right-0 m-10' onClick={() => getDevices().then(data => setDevices(data))}>
-                <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">SEARCH DEVICES</p>
-            </button>
+            <div className='absolute flex flex-col top-0 right-0 m-10 space-y-4'>
+                <button className='' onClick={() => getDevices().then(data => setDevices(data))}>
+                    <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">SEARCH DEVICES</p>
+                </button>
+                <Link href={pathname+`/newdevice`}>
+                    <button className=''>
+                        <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADD DEVICE</p>
+                    </button>
+                </Link>
+            </div>
             <div className='flex md:flex-col'>
                 {
                     devices == null ? (

@@ -18,6 +18,14 @@ export const signupSchema = z.object({
 
 export type TsignupSchema = z.infer<typeof signupSchema>;
 
+export const newdeviceSchema = z.object({
+  serial_number: z.string().max(30, "Número de série deve ter no máximo 50 caracteres"),
+  model: z.string().max(30, "Modelo deve ter no máximo 50 caracteres"),
+  location_id: z.coerce.number().min(1, "Deve ser um número"),
+});
+
+export type TnewdeviceSchema = z.infer<typeof newdeviceSchema>;
+
 export interface Metrics {
   id: number;
   location_id: number;
