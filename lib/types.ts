@@ -26,6 +26,14 @@ export const newdeviceSchema = z.object({
 
 export type TnewdeviceSchema = z.infer<typeof newdeviceSchema>;
 
+export const newMetricTypeSchema = z.object({
+  id: z.coerce.number({message: "Deve ser um número"}),
+  name: z.string().max(30, "Nome deve ter no máximo 30 caracteres"),
+  description: z.string().max(100, "Descrição deve ter no máximo 100 caracteres"),
+});
+
+export type TnewMetricTypeSchema = z.infer<typeof newMetricTypeSchema>;
+
 export interface Metrics {
   id: number;
   location_id: number;
