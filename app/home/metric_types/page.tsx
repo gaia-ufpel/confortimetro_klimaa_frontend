@@ -2,17 +2,23 @@
 import React, { useState, useEffect } from 'react';
 import { fetchMetricTypes } from '../../../lib/shared_fetchers';
 import { Metric } from '../../../lib/types';
+import { useRouter, usePathname } from 'next/navigation';
 
 
 const METRIC_TYPES = () => {
+    const router = useRouter();
+    const pathname = usePathname();
     useEffect(() => {
         fetchMetricTypes().then(data => setMetricTypes(data))
     }, [])
-    
+
     const [metricTypes, setMetricTypes] = useState<Metric[] | null>();
-    
+
     return (
-        <div className='flex min-h-screen min-w-screen justify-center items-center font-montserrat'>
+        <div className='relative flex min-h-screen min-w-screen justify-center items-center font-montserrat'>
+            <button className='absolute top-0 right-0 mt-10 mr-10' onClick={() => { router.push(pathname + `/newmetrictype`) }}>
+                <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADD METRIC TYPE</p>
+            </button>
             {metricTypes == null ? <div className='font-sans text-2xl'>No metrics to show</div> :
                 <div className="relative overflow-x-auto rounded">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
