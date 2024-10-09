@@ -21,10 +21,11 @@ const Locations = () => {
       </div>
       {locations == null ? <div className='font-sans text-2xl'>No locations to show</div> :
         locations.map((location) => (
-          <div key={location.id} className='card bg-white shadow-lg rounded-lg p-6 m-4'>
-            <h3 className='campus text-xl font-bold mb-2'>{location.campus}</h3>
-            <p className='building text-gray-700'>Building: {location.building}</p>
-            <p className='room text-gray-700'>Room: {location.room}</p>
+          <div key={location.id} className='card bg-white shadow-lg rounded-lg p-6 m-4 text-gray-700'>
+            <h3 className='text-xl font-bold mb-2'>{location.campus}</h3>
+            <p>ID: {location.id}</p>
+            <p>Building: {location.building}</p>
+            <p>Room: {location.room}</p>
           </div>
         ))
       }

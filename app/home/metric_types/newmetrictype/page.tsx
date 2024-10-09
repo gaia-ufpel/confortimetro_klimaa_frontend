@@ -13,7 +13,7 @@ const Page = () => {
 
     const postMetricType = async (data: TnewMetricTypeSchema) => {
         try {
-            const response = await api.post(`/metric_types`, JSON.stringify(data), {
+            const response = await api.post(`/metric-type`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json',
                     'accept': '*/*',

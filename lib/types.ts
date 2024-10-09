@@ -18,21 +18,31 @@ export const signupSchema = z.object({
 
 export type TsignupSchema = z.infer<typeof signupSchema>;
 
-export const newdeviceSchema = z.object({
+export const DeviceSchema = z.object({
+  id: z.coerce.number().min(1, "Deve ser um número"),
   serial_number: z.string().max(30, "Número de série deve ter no máximo 50 caracteres"),
   model: z.string().max(30, "Modelo deve ter no máximo 50 caracteres"),
   location_id: z.coerce.number().min(1, "Deve ser um número"),
 });
 
-export type TnewdeviceSchema = z.infer<typeof newdeviceSchema>;
+export type TDeviceSchema = z.infer<typeof DeviceSchema>;
 
 export const newMetricTypeSchema = z.object({
-  id: z.coerce.number({message: "Deve ser um número"}),
+  id: z.coerce.number({ message: "Deve ser um número" }),
   name: z.string().max(30, "Nome deve ter no máximo 30 caracteres"),
   description: z.string().max(100, "Descrição deve ter no máximo 100 caracteres"),
 });
 
 export type TnewMetricTypeSchema = z.infer<typeof newMetricTypeSchema>;
+
+export const LocationSchema = z.object({
+  id: z.coerce.number({ message: "Deve ser um número" }),
+  campus: z.string().max(30, "Campus deve ter no máximo 30 caracteres"),
+  building: z.string().max(30, "Building deve ter no máximo 30 caracteres"),
+  room: z.string().max(30, "Room deve ter no máximo 30 caracteres"),
+});
+
+export type TLocationSchema = z.infer<typeof LocationSchema>;
 
 export interface Metrics {
   id: number;
@@ -63,26 +73,47 @@ export interface Location {
   room: string;
 }
 
-export function generateSensorData(startDate: Date, numDevices: number): Metrics[] {
-  const data: Metrics[] = [];
+interface SensorData {
+  id: number;
+  location_id: number;
+  value: number;
+  datetime: string;
+  device_id: number;
+  metric_type_id: number;
+}
+
+export function generateSensorData(startDate: Date): SensorData[] {
+
+  // Função para gerar as datas a cada hora por 24 horas
+  function generate24hdates(startDate: Date): Date[] {
+    const dates: Date[] = [];
+    let currentDate = new Date(startDate);
+    currentDate.setHours(0, 0, 0, 0); // Inicia à meia-noite
+    for (let i = 0; i < 24; i++) { // Gera uma data para cada hora
+      dates.push(new Date(currentDate));
+      currentDate.setHours(currentDate.getHours() + 1); // Incrementa uma hora
+    }
+    return dates;
+  }
+
+  const data: SensorData[] = [];
+
   let currentId = 1;
-  const numEntries = 10; // Número fixo de períodos
+  // Gera as datas a cada hora por 24 horas
+  const dates = generate24hdates(startDate);
 
-  for (let i = 0; i < numEntries; i++) {
-    const currentDateTime = new Date(startDate);
-    currentDateTime.setMinutes(startDate.getMinutes() + i * 5); // Incrementa o tempo a cada 5 minutos
-
-    for (let deviceId = 1; deviceId <= numDevices; deviceId++) { // Gera dados com base no número de dispositivos fornecido
-      for (let metricTypeId = 1; metricTypeId <= 4; metricTypeId++) { // Quatro tipos de métricas (metric_type_id de 1 a 4)
-        data.push({
-          id: currentId++,
-          location_id: Math.floor(Math.random() * 10) + 1, // Valor aleatório para location_id
-          value: parseFloat((Math.random() * 100).toFixed(2)), // Valor aleatório entre 0 e 100
-          datetime: currentDateTime.toISOString(),
-          device_id: deviceId,
-          metric_type_id: metricTypeId,
-        });
-      }
+  // Itera sobre cada data gerada
+  for (const currentDateTime of dates) {
+    // Para cada data, gera quatro diferentes métricas (metric_type_id de 1 a 4)
+    for (let metricTypeId = 1; metricTypeId <= 4; metricTypeId++) {
+      data.push({
+        id: currentId++,
+        location_id: 1, // Valor aleatório para location_id
+        value: parseFloat((Math.random() * 100).toFixed(2)), // Valor aleatório entre 0 e 100
+        datetime: currentDateTime.toISOString(),
+        device_id: 1, // Usa o device_id fornecido
+        metric_type_id: metricTypeId,
+      });
     }
   }
 
