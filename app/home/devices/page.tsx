@@ -3,13 +3,34 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { getDevices, getMetricsByDeviceId } from '@/lib/shared_fetchers';
-import { Device, Metrics } from '@/lib/types';
+import { Device, generateSensorData, Metrics } from '@/lib/types';
 import { LineChart, Line, CartesianGrid, YAxis, XAxis, Tooltip, Legend } from 'recharts';
 
+const dummyDevice: Device = {
+    id: 1,
+    serial_number: 'DUMMY123',
+    model: 'Dummy Model',
+    location_id: 0,
+};
+
+const transformData = (metrics: Metrics[]) => {
+    const groupedData: { [key: string]: any } = {};
+  
+    metrics.forEach((metric) => {
+      const dateKey = new Date(metric.datetime).toISOString(); // Garantir que datetime esteja formatado corretamente
+      if (!groupedData[dateKey]) {
+        groupedData[dateKey] = { datetime: dateKey };
+      }
+      groupedData[dateKey][`metric_${metric.metric_type_id}`] = metric.value;
+    });
+  
+    return Object.values(groupedData);
+  };
+  
 export default function DEVICES() {
-    const [devices, setDevices] = useState<Device[] | null>()
+    const [devices, setDevices] = useState<Device[] | null>([dummyDevice])
     const [selectedDevice, setSelectedDevice] = useState<Device | null>();
-    const [deviceMetrics, setDeviceMetrics] = useState<Metrics[] | null>(null);
+    const [deviceMetrics, setDeviceMetrics] = useState<Metrics[] | null>(transformData(generateSensorData(new Date())));
     const pathname = usePathname();
     const router = useRouter();
 
@@ -33,9 +54,9 @@ export default function DEVICES() {
                 <button className='' onClick={() => getDevices().then(data => setDevices(data))}>
                     <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">SEARCH DEVICES</p>
                 </button>
-                    <button className='' onClick={ () => { router.push(pathname + `/newdevice`)}}>
-                        <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADD DEVICE</p>
-                    </button>
+                <button className='' onClick={() => { router.push(pathname + `/newdevice`) }}>
+                    <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADD DEVICE</p>
+                </button>
             </div>
             <div className='flex md:flex-col'>
                 {
@@ -53,38 +74,38 @@ export default function DEVICES() {
                     )
                 }
 
-                {
-                    selectedDevice && (
-                        <div className='mt-10'>
-                            <h2 className='font-bold text-xl mb-4'>{selectedDevice.serial_number}</h2>
-                            {deviceMetrics && deviceMetrics.length > 0 ? (
-                                <LineChart
-                                    width={800}
-                                    height={400}
-                                    data={deviceMetrics}
-                                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                                >
-                                    <CartesianGrid stroke="#ccc" />
-                                    <XAxis dataKey="datetime" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    {Object.keys(metricsByType).map(metricTypeId => (
-                                        <Line
-                                            key={metricTypeId}
-                                            type="monotone"
-                                            dataKey="value"
-                                            data={metricsByType[Number(metricTypeId)]}
-                                            name={`Metric ${metricTypeId}`}
-                                            stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`}
-                                        />
-                                    ))}
-                                </LineChart>
-                            ) : ("")}
-                        </div>
-                    )
-                }
             </div>
+            {
+                selectedDevice && (
+                    <div className='mt-10'>
+                        <h2 className='font-bold text-xl mb-4'>{selectedDevice.serial_number}</h2>
+                        {deviceMetrics && deviceMetrics.length > 0 ? (
+                            <LineChart
+                                width={800}
+                                height={400}
+                                data={deviceMetrics}
+                                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                            >
+                                <CartesianGrid stroke="#ccc" />
+                                <XAxis dataKey="datetime" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                {Object.keys(metricsByType).map(metricTypeId => (
+                                    <Line
+                                        key={metricTypeId}
+                                        type="monotone"
+                                        dataKey="value"
+                                        data={metricsByType[Number(metricTypeId)]}
+                                        name={`Metric ${metricTypeId}`}
+                                        stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`}
+                                    />
+                                ))}
+                            </LineChart>
+                        ) : ("")}
+                    </div>
+                )
+            }
         </div>
     )
 }

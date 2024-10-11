@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { BsInfoCircle } from "react-icons/bs";
 import { TbActivityHeartbeat } from "react-icons/tb";
 import { FaTowerBroadcast } from "react-icons/fa6"; import { MdLogout } from "react-icons/md";
@@ -13,6 +13,7 @@ import { navigate } from "../login/actions";
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+    let router = useRouter();
     let pathname = usePathname();
     const [openNavbar, setOpenNavbar] = useState(true);
 
@@ -25,7 +26,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {children}
             <nav className={`absolute p-1 top-0 bottom-0 flex flex-col justify-between items-center z-10 bg-slate-200 ${openNavbar ? "translate-x-0" : "translate-x-[-40px]"} duration-500`}>
                 <BsArrowLeftShort className={`absolute top-9 -right-3 border border-black bg-white rounded-full cursor-pointer text-2xl ${!openNavbar && "rotate-180"} duration-200`} onClick={() => setOpenNavbar(!openNavbar)} />
-                    <Link href={pathname + ``} title="Profile">
+                    <Link href={`/home/profile`} title="Profile">
                         <CgProfile className="w-[30px] h-[30px] hover:text-slate-400"></CgProfile>
                     </Link>
                     { /* <Image src={"/login.png"} alt="Homepage" width={30} height={30}></Image> */}

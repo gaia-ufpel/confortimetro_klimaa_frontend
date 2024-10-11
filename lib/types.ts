@@ -44,6 +44,15 @@ export const LocationSchema = z.object({
 
 export type TLocationSchema = z.infer<typeof LocationSchema>;
 
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  group: string;
+  is_active: boolean;
+  is_admin: boolean;
+}
 export interface Metrics {
   id: number;
   location_id: number;

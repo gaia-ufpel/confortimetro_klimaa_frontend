@@ -86,3 +86,20 @@ export const fetchLocations = async () => {
         console.log(e);
     }
 };
+
+export const getUserInfo = async () => {
+    try {
+        const response = await api.get(`/user`, {
+            headers:
+            {
+                'Content-Type': 'application/json',
+                'accept': '*/*',
+            },
+        });
+
+        const userInfo = await response.data;
+        return userInfo;
+    } catch (e: any) {
+        console.log(e);
+    }
+}
