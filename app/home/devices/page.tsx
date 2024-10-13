@@ -1,52 +1,13 @@
 "use client";
-import React, { useState, useEffect } from 'react'
-import Link from 'next/link';
+import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation';
-import { getDevices, getMetricsByDeviceId } from '@/lib/shared_fetchers';
-import { Device, generateSensorData, Metrics } from '@/lib/types';
-import { LineChart, Line, CartesianGrid, YAxis, XAxis, Tooltip, Legend } from 'recharts';
+import { getDevices } from '@/lib/shared_fetchers';
+import { Device } from '@/lib/types';
 
-const dummyDevice: Device = {
-    id: 1,
-    serial_number: 'DUMMY123',
-    model: 'Dummy Model',
-    location_id: 0,
-};
-
-const transformData = (metrics: Metrics[]) => {
-    const groupedData: { [key: string]: any } = {};
-  
-    metrics.forEach((metric) => {
-      const dateKey = new Date(metric.datetime).toISOString(); // Garantir que datetime esteja formatado corretamente
-      if (!groupedData[dateKey]) {
-        groupedData[dateKey] = { datetime: dateKey };
-      }
-      groupedData[dateKey][`metric_${metric.metric_type_id}`] = metric.value;
-    });
-  
-    return Object.values(groupedData);
-  };
-  
 export default function DEVICES() {
-    const [devices, setDevices] = useState<Device[] | null>([dummyDevice])
-    const [selectedDevice, setSelectedDevice] = useState<Device | null>();
-    const [deviceMetrics, setDeviceMetrics] = useState<Metrics[] | null>(transformData(generateSensorData(new Date())));
+    const [devices, setDevices] = useState<Device[] | null>(null)
     const pathname = usePathname();
     const router = useRouter();
-
-    useEffect(() => {
-        if (selectedDevice) {
-            getMetricsByDeviceId(selectedDevice.id).then(data => setDeviceMetrics(data));
-        }
-    }, [selectedDevice]);
-
-    const metricsByType = deviceMetrics ? deviceMetrics.reduce((acc: { [key: number]: Metrics[] }, metric) => {
-        if (!acc[metric.metric_type_id]) {
-            acc[metric.metric_type_id] = [];
-        }
-        acc[metric.metric_type_id].push(metric);
-        return acc;
-    }, {}) : {};
 
     return (
         <div className='relative flex justify-center min-h-screen items-center'>
@@ -66,46 +27,14 @@ export default function DEVICES() {
                         </div>
                     ) : (
                         devices.map((value) => (
-                            <button onClick={() => setSelectedDevice(value)} className='bg-white text-black font-montserrat border border-gray-300 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-gray-300 focus:outline-none focus:shadow-outline' key={value.id}>
+                            <button onClick={() => console.log('implementar')} className='bg-white text-black font-montserrat border border-gray-300 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-gray-300 focus:outline-none focus:shadow-outline' key={value.id}>
                                 <div className='font-bold'>{value.serial_number}</div>
                                 {value.model} - {value.location_id}
                             </button>
                         ))
                     )
                 }
-
             </div>
-            {
-                selectedDevice && (
-                    <div className='mt-10'>
-                        <h2 className='font-bold text-xl mb-4'>{selectedDevice.serial_number}</h2>
-                        {deviceMetrics && deviceMetrics.length > 0 ? (
-                            <LineChart
-                                width={800}
-                                height={400}
-                                data={deviceMetrics}
-                                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                            >
-                                <CartesianGrid stroke="#ccc" />
-                                <XAxis dataKey="datetime" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                {Object.keys(metricsByType).map(metricTypeId => (
-                                    <Line
-                                        key={metricTypeId}
-                                        type="monotone"
-                                        dataKey="value"
-                                        data={metricsByType[Number(metricTypeId)]}
-                                        name={`Metric ${metricTypeId}`}
-                                        stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`}
-                                    />
-                                ))}
-                            </LineChart>
-                        ) : ("")}
-                    </div>
-                )
-            }
         </div>
     )
 }
