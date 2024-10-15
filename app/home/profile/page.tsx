@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { getUserInfo } from '@/lib/shared_fetchers';
-import { User, generateSensorData } from '@/lib/types';
+import { User } from '@/lib/types';
 
 const page = () => {
     const router = useRouter();
