@@ -1,13 +1,42 @@
 "use client";
 import React, { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation';
+import api from '@/app/api';
 import { getDevices } from '@/lib/shared_fetchers';
 import { Device } from '@/lib/types';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+
 
 export default function DEVICES() {
+    const { toast } = useToast();
     const [devices, setDevices] = useState<Device[] | null>(null)
     const pathname = usePathname();
     const router = useRouter();
+    
+    const removeDevice = async (id: number) => {
+        try {
+            const response = await api.delete(`/device/${id}`);
+            console.log(response.data)
+            toast({ title: "Sucesso", description: "Dispositivo removido com sucesso" });
+            setDevices(prevDevices => prevDevices ? prevDevices.filter(device => device.id !== id) : null);
+        } catch (error) {
+            console.error(error);
+            toast({ title: "Erro", description: "Não foi possível remover o dispositivo, tente novamente." });
+        }
+    }
 
     return (
         <div className='relative flex justify-center min-h-screen items-center'>
@@ -27,10 +56,29 @@ export default function DEVICES() {
                         </div>
                     ) : (
                         devices.map((value) => (
-                            <button onClick={() => console.log('implementar')} className='bg-white text-black font-montserrat border border-gray-300 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-gray-300 focus:outline-none focus:shadow-outline' key={value.id}>
+                            <div className='relative bg-white text-black font-montserrat border border-gray-300 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none focus:outline-none focus:shadow-outline' key={value.id}>
                                 <div className='font-bold'>{value.serial_number}</div>
-                                {value.model} - {value.location_id}
-                            </button>
+                                <p>{value.model} - ID: {value.location_id}</p>
+                                <div className='m-3 float-start'>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button variant={'outline'}>Remover Dispositivo</Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle className='text-xl'>Remover Dispositivo</AlertDialogTitle>
+                                                <AlertDialogDescription className='font-montserrat'>
+                                                    Este processo é irreversível, tem certeza que deseja remover o dispositivo?
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogAction onClick={() => { removeDevice(value.id) }}>Remover</AlertDialogAction>
+                                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </div>
+                            </div>
                         ))
                     )
                 }
