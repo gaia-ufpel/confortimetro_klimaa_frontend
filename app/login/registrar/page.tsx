@@ -8,8 +8,10 @@ import { signupSchema, TsignupSchema } from '@/lib/types';
 import api from '@/app/api';
 import { navigate } from '@/app/login/actions';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 const REGISTRAR = () => {
+    const router = useRouter();
     const { toast } = useToast();
     const fetchRegister = async (signUp: Omit<TsignupSchema, 'confirmpassword'>) => {
         try {
@@ -19,10 +21,8 @@ const REGISTRAR = () => {
                     'accept': '*/*',
                 },
             });
-            toast({ title: "Sucesso", description: "Cadastro" });
-            setInterval(() => {
-                navigate('/login');
-            }, 2000);
+            toast({ title: "Sucesso", description: "Usuário cadastrado com sucesso, faça login." });
+            router.push('/login');
         } catch (error: any) {
             toast({ title: "Erro", description: "Não foi possível realizar o cadastro, tente novamente.", variant: "destructive" });
             console.error('Erro:', error);

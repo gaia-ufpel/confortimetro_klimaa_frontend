@@ -9,10 +9,11 @@ import { redirect, useParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import TimedPopup from '../timed_popup';
 import api from '../api';
-import { navigate } from './actions';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 const LOGIN = () => {
+  const router = useRouter();
   const pathname = usePathname()
   const { toast } = useToast();
   const [credentials, setCredentials] = useState({
@@ -34,9 +35,7 @@ const LOGIN = () => {
       api.defaults.headers.Authorization = token;
 
       toast({ title: "Sucesso", description: "Login bem sucedido, redirecionando" });
-      setInterval(() => {
-        navigate('/home');
-      }, 2000);
+      router.push('/home');
 
     } catch (error: any) {
       toast({ title: "Erro", description: "Não foi possível realizar o login, tente novamente.", variant: "destructive" });
