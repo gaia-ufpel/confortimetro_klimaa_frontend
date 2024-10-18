@@ -37,21 +37,6 @@ export const getMetrics = async () => {
     }
 }
 
-export const getMetricsByDeviceId = async (DeviceId: number) => {
-    try {
-        const metrics = await api.get(`/metric/search?device_id=${DeviceId}`, {
-            headers:
-            {
-                'Content-Type': 'application/json',
-                'accept': '*/*',
-            }
-        })
-        const metricsData = await metrics.data
-        return metricsData;
-    } catch (e: any) {
-        console.log(e);
-    }
-}
 
 export const getDevices = async () => {
     try {

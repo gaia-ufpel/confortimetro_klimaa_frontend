@@ -5,30 +5,27 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LocationSchema, TLocationSchema } from '@/lib/types';
-import TimedPopup from '@/app/timed_popup';
+import { useToast } from '@/hooks/use-toast';
 
 const page = () => {
+    const { toast } = useToast();
     const router = useRouter();
     const pathname = usePathname();
-    const [isRegisterSuccessfully, setIsRegisterSuccessfully] = useState<boolean>(false);
 
     const postLocation = async (data: TLocationSchema) => {
         try {
-            const response = await api.post(`/locations`, JSON.stringify(data), {
+            const response = await api.post(`/location`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json',
                     'accept': '*/*',
                 },
             });
 
-            setIsRegisterSuccessfully(true);
-
-            setTimeout(() => {
-                setIsRegisterSuccessfully(false);
-            }, 5000);
+            toast({ title: "Sucesso", description: "Localidade registrada com sucesso" });
 
         } catch (error: any) {
             console.error('Erro:', error);
+            toast({ title: "Erro", description: "Não foi possível registrar a localidade, tente novamente.", variant: 'destructive' });
         }
     }
 
@@ -86,6 +83,16 @@ const page = () => {
                         />
                         {errors.building && (<p className='text-red-500'>{errors.building.message}</p>)}
                     </div>
+                    <div className='flex flex-col items-start'>
+                        <label className='font-mono text-xl font-semibold'>Room:</label>
+                        <input
+                            placeholder='Room'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            {...register('room', { required: true })}
+                            disabled={isSubmitting}
+                        />
+                        {errors.building && (<p className='text-red-500'>{errors.building.message}</p>)}
+                    </div>
                     <button
                         type="submit"
                         className='px-10 py-2 rounded-xl text-white bg-purple-600 hover:bg-purple-700 shadow-md font-bold text-xl'
@@ -94,9 +101,6 @@ const page = () => {
                         Registrar Localidade
                     </button>
                 </form>
-            </div>
-            <div className='absolute right-0 bottom-0 m-10'>
-                {isRegisterSuccessfully && <TimedPopup title='Sucesso' message='A localidade foi registrada com sucesso' className='font-mono' />}
             </div>
         </div >
     )

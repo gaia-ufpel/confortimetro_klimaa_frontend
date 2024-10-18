@@ -5,30 +5,32 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { DeviceSchema, TDeviceSchema } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useToast } from '@/hooks/use-toast';
 import api from '@/app/api';
-import TimedPopup from '@/app/timed_popup';
+
 
 const Page = () => {
+    const { toast } = useToast();
     const router = useRouter();
-    const [isRegisterSuccessfully, setIsRegisterSuccessfully] = useState<boolean>(false);
 
     const postDevice = async (data: TDeviceSchema) => {
         try {
-            const response = await api.post(`/device`, JSON.stringify(data), {
+            const convertedData = {
+                ...data,
+                id: Number(data.id),
+                location_id: Number(data.location_id),
+            };
+            const response = await api.post(`/device`, JSON.stringify(convertedData), {
                 headers: {
                     'Content-Type': 'application/json',
                     'accept': '*/*',
                 },
             });
-
-            setIsRegisterSuccessfully(true);
-
-            setTimeout(() => {
-                setIsRegisterSuccessfully(false);
-            }, 5000);
+            toast({ title: "Sucesso", description: "Dispositivo registrado com sucesso" });
 
         } catch (error: any) {
             console.error('Erro:', error);
+            toast({ title: "Erro", description: "Não foi possível registrar o dispositivo, tente novamente." });
         }
     };
 
@@ -58,7 +60,7 @@ const Page = () => {
                 </button>
             </div>
             <div className='bg-white p-6 rounded-lg shadow-lg'>
-                <form className='grid gap-y-8' onSubmit={handleSubmit(onSubmit)}>
+                <form className='grid gap-y-8' onSubmit={handleSubmit(postDevice)}>
                     <div className='flex flex-col items-start'>
                         <label className='font-mono text-xl font-semibold'>ID:</label>
                         <input
@@ -109,9 +111,6 @@ const Page = () => {
                     <div className='flex justify-center'>
                     </div>
                 </form>
-            </div>
-            <div className='absolute right-0 bottom-0 m-10'>
-                {isRegisterSuccessfully && <TimedPopup title='Sucesso' message='O dispositivo foi registrado com sucesso' className='font-mono' />}
             </div>
         </div>
     );

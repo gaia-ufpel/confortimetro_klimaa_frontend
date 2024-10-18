@@ -10,15 +10,15 @@ import Link from 'next/link';
 import TimedPopup from '../timed_popup';
 import api from '../api';
 import { navigate } from './actions';
+import { useToast } from '@/hooks/use-toast';
 
 const LOGIN = () => {
   const pathname = usePathname()
+  const { toast } = useToast();
   const [credentials, setCredentials] = useState({
     email: '',
     password: ''
   })
-  const [loginError, setLoginError] = useState<string>('')
-  const [loginSucess, setLoginSucess] = useState<boolean>(false)
 
   const login = async () => {
     try {
@@ -33,22 +33,19 @@ const LOGIN = () => {
       localStorage.setItem('token', token);
       api.defaults.headers.Authorization = token;
 
-      setLoginSucess(true);
+      toast({ title: "Sucesso", description: "Login bem sucedido, redirecionando" });
       setInterval(() => {
-        setLoginSucess(false);
         navigate('/home');
-      }, 3000);
+      }, 2000);
 
     } catch (error: any) {
-      setLoginError(String(error.message) || 'Erro desconhecido');
+      toast({ title: "Erro", description: "Não foi possível realizar o login, tente novamente.", variant: "destructive" });
       console.error('Erro:', error);
     }
   };
 
   return (
     <div className='relative flex flex-col justify-center items-center font-montserrat min-h-screen'>
-      {loginError && <TimedPopup title={"Login Error"} message={loginError} className={"absolute right-0 bottom-0 m-4 text-2xl font-bold font-montserrat text-center"} />}
-
       <form className='flex flex-col space-y-4 justify-center items-center p-10'>
         <Image className="w-auto h-auto" src="/login.png" width={180} height={180} alt='login image' priority />
         <div className='relative space-y-8 py-10'>
@@ -63,14 +60,6 @@ const LOGIN = () => {
           <button className='absolute right-0 bottom-0 text-zinc-100 text-base font-semibold tracking-[0] hover:underline hover:decoration-solid'> Esqueci minha senha</button>
         </div>
         <button type="button" className='px-10 py-2 rounded-xl text-neutral-50 bg-[#885AC6] hover:bg-[#926ec2] shadow-md border-2 border-green-300 font-extrabold text-2xl' onClick={login}> Entrar </button>
-        {
-          loginSucess
-          &&
-          <div className='absolute flex text-center items-center space-x-2 bottom-2'>
-            <div className='relative font-sans font-bold text-[#fdfdfd]'>Login Bem Sucedido! Redirecionando...</div>
-            <GrValidate className='relative text-[#28f451] text-2xl'></GrValidate>
-          </div>
-        }
       </form>
       <div className='flex flex-col space-y-10'>
         <div className='text-zinc-100 text-base font-semibold pointer-events-none'>Ainda não possui uma conta?</div>

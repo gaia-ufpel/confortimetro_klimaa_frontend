@@ -6,10 +6,11 @@ import { newMetricTypeSchema, TnewMetricTypeSchema } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import api from '@/app/api';
 import TimedPopup from '@/app/timed_popup';
+import { useToast } from '@/hooks/use-toast';
 
 const Page = () => {
     const router = useRouter();
-    const [isRegisterSuccessfully, setIsRegisterSuccessfully] = useState<boolean>(false);
+    const { toast } = useToast();
 
     const postMetricType = async (data: TnewMetricTypeSchema) => {
         try {
@@ -20,14 +21,10 @@ const Page = () => {
                 },
             });
 
-            setIsRegisterSuccessfully(true);
-
-            setTimeout(() => {
-                setIsRegisterSuccessfully(false);
-            }, 5000);
-
+            toast({ title: "Sucesso", description: "Tipo de Métrica registrado com sucesso" });
         } catch (error: any) {
             console.error('Erro:', error);
+            toast({ title: "Erro", description: "Não foi possível registrar o Tipo de Métrica, tente novamente.", variant: 'destructive' });
         }
     };
 
@@ -44,7 +41,6 @@ const Page = () => {
             ...data,
             id: Number(data.id),
         };
-        console.log(convertedData);
         await postMetricType(convertedData);
     };
 
@@ -95,9 +91,6 @@ const Page = () => {
                         Registrar Tipo de Métrica
                     </button>
                 </form>
-            </div>
-            <div className='absolute right-0 bottom-0 m-10'>
-                {isRegisterSuccessfully && <TimedPopup title='Sucesso' message='O tipo de métrica foi registrado com sucesso' className='font-mono' />}
             </div>
         </div>
     );

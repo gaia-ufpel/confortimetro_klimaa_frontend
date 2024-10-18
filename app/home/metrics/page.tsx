@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect, useMemo } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from '@/components/ui/select';
-import { fetchLocations, getDevices, getMetricsByDeviceId } from '@/lib/shared_fetchers';
+import { fetchLocations, getDevices } from '@/lib/shared_fetchers';
 import { TLocationSchema, TDeviceSchema } from '@/lib/types';
+import api from '@/app/api';
 import Chart from './chart';
 
 
@@ -12,7 +13,24 @@ const METRICS = () => {
   const [selectedLocation, setSelectedLocation] = useState<string>();
   const [selectedDevice, setSelectedDevice] = useState<string>();
   const [deviceIDMetricData, setDeviceIDMetricData] = useState<any[] | null>(null);
-
+  
+  const getMetricsByDeviceId = async (DeviceId: number) => {
+    const locationIdFromDeviceId = devices?.find(device => device.id == DeviceId)?.location_id;
+    console.log(DeviceId, locationIdFromDeviceId)
+    try {
+        const metrics = await api.get(`/metric/search?device_id=${DeviceId}&location_id=${locationIdFromDeviceId}`, {
+            headers:
+            {
+                'Content-Type': 'application/json',
+                'accept': '*/*',
+            }
+        })
+        const metricsData = await metrics.data
+        return metricsData;
+    } catch (e: any) {
+        console.log(e);
+    }
+  }
   const filteredDevices = useMemo(() => {
     return selectedLocation == 'all' ? devices : devices?.filter(device => device.location_id == Number(selectedLocation));
   }, [selectedLocation])

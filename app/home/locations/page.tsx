@@ -52,7 +52,7 @@ const Locations = () => {
         </div> :
         locations.map((location) => (
           <div key={location.id} className='card bg-white shadow-lg rounded-lg p-6 m-4 text-gray-700'>
-            <h3 className='text-xl font-bold mb-2'>{location.campus}</h3>
+            <h3 className='text-xl font-bold mb-2'>Campus: {location.campus}</h3>
             <p>ID: {location.id}</p>
             <p>Building: {location.building}</p>
             <p>Room: {location.room}</p>
