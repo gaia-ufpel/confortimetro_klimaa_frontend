@@ -22,7 +22,7 @@ export const DeviceSchema = z.object({
   id: z.coerce.number().min(1, "Deve ser um número"),
   serial_number: z.string().max(30, "Número de série deve ter no máximo 50 caracteres"),
   model: z.string().max(30, "Modelo deve ter no máximo 50 caracteres"),
-  location_id: z.coerce.number().min(1, "Deve ser um número"),
+  location_id: z.coerce.number({message: "Deve ser um número inteiro"}).min(1),
 });
 
 export type TDeviceSchema = z.infer<typeof DeviceSchema>;

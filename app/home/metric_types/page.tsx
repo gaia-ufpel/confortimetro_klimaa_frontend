@@ -4,23 +4,20 @@ import { useRouter, usePathname } from 'next/navigation';
 import api from '@/app/api';
 import { fetchMetricTypes } from '@/lib/shared_fetchers';
 import { Metric } from '@/lib/types';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { dummyMetrics } from '@/lib/dummyConstructors';
+import Edit from './edit';
+import RemoveDialog from '@/app/_components/RemoveDialog';
+
+import { Poppins } from 'next/font/google';
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ["400"],
+});
 
 const MetricTypes = () => {
   const { toast } = useToast();
-  const [metricTypes, setMetricTypes] = useState<Metric[] | null>(null);
+  const [metricTypes, setMetricTypes] = useState<Metric[] | null>(dummyMetrics);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -36,15 +33,18 @@ const MetricTypes = () => {
     }
   };
 
-  useEffect(() => {
-    fetchMetricTypes().then(data => setMetricTypes(data));
-  }, []);
+  //useEffect(() => {
+  //  fetchMetricTypes().then(data => setMetricTypes(data));
+  //}, []);
 
   return (
-    <div className='relative flex justify-center items-center min-h-screen p-10'>
+    <div className='relative flex flex-col'>
+      <h1 className={`${poppins.className} text-3xl font-bold mt-4 md:mt-10 text-center`}>Tipos de métricas</h1>
+
       <button className='absolute top-0 right-0 mt-10 mr-10' onClick={() => { router.push(pathname + `/newmetrictype`) }}>
         <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADD METRIC TYPE</p>
       </button>
+
       {metricTypes == null ?
         <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role='alert'>
           No metrics found
@@ -79,24 +79,12 @@ const MetricTypes = () => {
                   <td className="px-6 py-4">
                     {metricType.description}
                   </td>
-                  <td className="px-6 py-4">
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant={'outline'}>Remover</Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle className='text-xl'>Remover métrica</AlertDialogTitle>
-                          <AlertDialogDescription className='font-montserrat'>
-                            Este processo é irreversível, tem certeza que deseja remover este tipo de métrica?
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogAction onClick={() => { removeMetricType(metricType.id) }}>Remover</AlertDialogAction>
-                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                  <td className="px-6 py-4 grid md:flex space-y-1 md:space-y-0 space-x-0 md:space-x-2">
+                    <RemoveDialog applyWhenRemove={() => removeMetricType(metricType.id)}
+                      trigger='Remover'
+                      title='Remover métrica'
+                      description='Este processo é irreversível, tem certeza que deseja remover este tipo de métrica?' />
+                    <Edit metricType={metricType} />
                   </td>
                 </tr>
               ))}
