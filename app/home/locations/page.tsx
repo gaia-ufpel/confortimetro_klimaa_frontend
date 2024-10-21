@@ -16,7 +16,7 @@ import RemoveDialog from '@/app/_components/RemoveDialog';
 
 const Locations = () => {
   const { toast } = useToast();
-  const [locations, setLocations] = useState<Location[] | null>(dummyLocations);
+  const [locations, setLocations] = useState<Location[] | null>(null);
 
   const removeLocation = async (id: number) => {
     try {
@@ -46,7 +46,7 @@ const Locations = () => {
         }
       </div>
 
-      <div className='flex justify-center'>
+      <div className='flex justify-center mt-10'>
         {locations == null ?
           <div className="mt-40 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role='alert'>
             No locations found
@@ -58,7 +58,7 @@ const Locations = () => {
                 <p>ID: {location.id}</p>
                 <p>Building: {location.building}</p>
                 <p>Room: {location.room}</p>
-                <div className='grid md:flex md:flex-row space-y-2 md:space-y-0 md:space-x-4 m-3'>
+                <div className='grid lg:flex space-y-2 lg:space-y-0 lg:space-x-4 m-3'>
                   <RemoveDialog applyWhenRemove={() => removeLocation(location.id)}
                     trigger='Remover Local'
                     title='Remover Local'

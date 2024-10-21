@@ -6,7 +6,6 @@ import { getDevices } from '@/lib/shared_fetchers';
 import { Device } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import Edit from './edit';
-import { dummyDevices } from '@/lib/dummyConstructors';
 import RemoveDialog from '@/app/_components/RemoveDialog';
 import { Poppins } from 'next/font/google';
 import RefreshButton from '@/app/refresh_button';
@@ -17,7 +16,7 @@ const poppins = Poppins({
 
 export default function DEVICES() {
     const { toast } = useToast();
-    const [devices, setDevices] = useState<Device[] | null>(dummyDevices)
+    const [devices, setDevices] = useState<Device[] | null>(null)
     const pathname = usePathname();
     const router = useRouter();
 
@@ -44,27 +43,30 @@ export default function DEVICES() {
                 </button>*/}
             </div>
 
-            <div className='flex flex-col md:grid md:grid-cols-3'>
+            <div className='flex justify-center mt-10'>
                 {
-                    devices == null ? (
+                    devices == null ?
                         <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role='alert'>
                             No devices found
                         </div>
-                    ) : (
-                        devices.map((value) => (
-                            <div className='relative flex flex-col bg-white text-black font-montserrat border border-gray-300 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none focus:outline-none focus:shadow-outline' key={value.id}>
-                                <div className='font-bold'>{value.serial_number}</div>
-                                <p>{value.model} - ID: {value.location_id}</p>
-                                <div className='grid md:flex md:flex-row space-y-2 md:space-y-0 md:space-x-4 m-3'>
-                                    <RemoveDialog applyWhenRemove={() => removeDevice(value.id)}
-                                        trigger='Remover Dispositivo'
-                                        title='Remover Dispositivo'
-                                        description='Este processo é irreversível, tem certeza que deseja remover o dispositivo?' />
-                                    <Edit device={value} />
-                                </div>
-                            </div>
-                        ))
-                    )
+                        :
+                        <div className='grid md:grid md:grid-cols-2 lg:grid-cols-4 mx-10 md:mx-32'>
+                            {
+                                devices.map((value) => (
+                                    <div className='relative flex flex-col bg-white text-black font-montserrat border border-gray-300 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none focus:outline-none focus:shadow-outline' key={value.id}>
+                                        <div className='font-bold'>{value.serial_number}</div>
+                                        <p>{value.model} - ID: {value.location_id}</p>
+                                        <div className='grid space-y-2 m-3'>
+                                            <RemoveDialog applyWhenRemove={() => removeDevice(value.id)}
+                                                trigger='Remover Dispositivo'
+                                                title='Remover Dispositivo'
+                                                description='Este processo é irreversível, tem certeza que deseja remover o dispositivo?' />
+                                            <Edit device={value} />
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
                 }
             </div>
         </div>
