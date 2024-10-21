@@ -7,10 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import api from '@/app/api';
 import TimedPopup from '@/app/timed_popup';
 import { useToast } from '@/hooks/use-toast';
+import { dotSpinner } from 'ldrs';
+
 
 const Page = () => {
     const router = useRouter();
     const { toast } = useToast();
+    dotSpinner.register();
 
     const postMetricType = async (data: TnewMetricTypeSchema) => {
         try {
@@ -57,7 +60,7 @@ const Page = () => {
                         <label className='font-mono text-xl font-semibold'>ID:</label>
                         <input
                             placeholder='ID'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             disabled={isSubmitting}
                             {...register("id")}
                         />
@@ -67,7 +70,7 @@ const Page = () => {
                         <label className='font-mono text-xl font-semibold'>Nome do Tipo de Métrica:</label>
                         <input
                             placeholder='Metric Type Name'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             disabled={isSubmitting}
                             {...register("name")}
                         />
@@ -77,7 +80,7 @@ const Page = () => {
                         <label className='font-mono text-xl font-semibold'>Descrição:</label>
                         <input
                             placeholder='Description'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             disabled={isSubmitting}
                             {...register("description")}
                         />
@@ -85,11 +88,17 @@ const Page = () => {
                     </div>
                     <button
                         type="submit"
-                        className='px-10 py-2 rounded-xl text-white bg-purple-600 hover:bg-purple-700 shadow-md font-bold text-xl'
+                        className='px-10 py-2 rounded-xl text-white bg-purple-600 hover:bg-purple-700 shadow-md font-bold text-xl disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                         disabled={isSubmitting}
                     >
                         Registrar Tipo de Métrica
                     </button>
+                    {
+                        isSubmitting &&
+                        <div className='flex justify-center'>
+                            <l-dot-spinner size="50" speed={0.9} color={'black'} />
+                        </div>
+                    }
                 </form>
             </div>
         </div>

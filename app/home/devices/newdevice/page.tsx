@@ -6,12 +6,14 @@ import { useRouter } from 'next/navigation';
 import { DeviceSchema, TDeviceSchema } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '@/hooks/use-toast';
+import { dotSpinner } from 'ldrs';
 import api from '@/app/api';
 
 
 const Page = () => {
     const { toast } = useToast();
     const router = useRouter();
+    dotSpinner.register();
 
     const postDevice = async (data: TDeviceSchema) => {
         try {
@@ -30,7 +32,7 @@ const Page = () => {
 
         } catch (error: any) {
             console.error('Erro:', error);
-            toast({ title: "Erro", description: "Não foi possível registrar o dispositivo, tente novamente." });
+            toast({ title: "Erro", description: "Não foi possível registrar o dispositivo, tente novamente.", variant: "destructive" });
         }
     };
 
@@ -65,7 +67,7 @@ const Page = () => {
                         <label className='font-mono text-xl font-semibold'>ID:</label>
                         <input
                             placeholder='ID'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             disabled={isSubmitting}
                             {...register("id", { required: true })}
                         />
@@ -75,7 +77,7 @@ const Page = () => {
                         <label className='font-mono text-xl font-semibold'>Número de série:</label>
                         <input
                             placeholder='Serial Number'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             disabled={isSubmitting}
                             {...register("serial_number", { required: true })}
                         />
@@ -85,7 +87,7 @@ const Page = () => {
                         <label className='font-mono text-xl font-semibold'>Modelo:</label>
                         <input
                             placeholder='Model'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             disabled={isSubmitting}
                             {...register("model", { required: true })}
                         />
@@ -95,7 +97,7 @@ const Page = () => {
                         <label className='font-mono text-xl font-semibold'>Location ID:</label>
                         <input
                             placeholder='Location ID'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             disabled={isSubmitting}
                             {...register("location_id", { required: true })}
                         />
@@ -103,13 +105,17 @@ const Page = () => {
                     </div>
                     <button
                         type="submit"
-                        className='px-10 py-2 rounded-xl text-white bg-purple-600 hover:bg-purple-700 shadow-md font-bold text-xl'
+                        className='px-10 py-2 rounded-xl text-white bg-purple-600 hover:bg-purple-700 shadow-md font-bold text-xl disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                         disabled={isSubmitting}
                     >
                         Registrar dispositivo
                     </button>
-                    <div className='flex justify-center'>
-                    </div>
+                    {
+                        isSubmitting &&
+                        <div className='flex justify-center'>
+                            <l-dot-spinner size="50" speed={0.9} color={'black'} />
+                        </div>
+                    }
                 </form>
             </div>
         </div>

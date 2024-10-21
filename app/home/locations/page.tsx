@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Location } from '@/lib/types';
 import { fetchLocations } from '@/lib/shared_fetchers';
+import { useRouter, usePathname } from 'next/navigation';
 import Edit from './edit';
 import api from '@/app/api';
 import { useToast } from '@/hooks/use-toast';
@@ -10,13 +11,14 @@ const poppins = Poppins({
   subsets: ['latin'],
   weight: ["400"],
 });
-import { dummyLocations } from '@/lib/dummyConstructors';
 import RefreshButton from '@/app/refresh_button';
 import RemoveDialog from '@/app/_components/RemoveDialog';
 
 const Locations = () => {
   const { toast } = useToast();
   const [locations, setLocations] = useState<Location[] | null>(null);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const removeLocation = async (id: number) => {
     try {
@@ -36,15 +38,10 @@ const Locations = () => {
 
       <div className='absolute top-0 right-0 md:mt-10 md:mr-10'>
         <RefreshButton applyWhenClick={() => fetchLocations().then(data => setLocations(data))} />
-        {
-          /*
-  
-            <button className='' onClick={() => { router.push(pathname + `/newlocation`) }}>
-            <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADD LOCATION</p>
-          </button>
-          */
-        }
       </div>
+      <button className='flex justify-center my-10' onClick={() => { router.push(pathname + `/newlocation`) }}>
+        <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADICIONAR LOCALIDADE</p>
+      </button>
 
       <div className='flex justify-center mt-10'>
         {locations == null ?

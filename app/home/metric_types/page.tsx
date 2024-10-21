@@ -40,13 +40,13 @@ const MetricTypes = () => {
     <div className='relative flex flex-col'>
       <h1 className={`${poppins.className} text-3xl font-bold mt-4 md:mt-10 text-center`}>Tipos de métricas</h1>
 
-      <button className='absolute top-0 right-0 mt-10 mr-10' onClick={() => { router.push(pathname + `/newmetrictype`) }}>
+      <button className='flex justify-center my-10' onClick={() => { router.push(pathname + `/newmetrictype`) }}>
         <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADD METRIC TYPE</p>
       </button>
 
       <div className='flex justify-center mt-10'>
         {metricTypes == null ?
-          <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role='alert'>
+          <div className="mt-40 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role='alert'>
             No metrics found
           </div> :
           <div className="relative overflow-x-auto rounded">

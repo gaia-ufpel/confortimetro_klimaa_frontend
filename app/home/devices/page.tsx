@@ -38,15 +38,15 @@ export default function DEVICES() {
 
             <div className='absolute top-0 right-0 md:mt-10 md:mr-10'>
                 <RefreshButton applyWhenClick={() => getDevices().then(data => setDevices(data))} />
-                {/*<button className='' onClick={() => { router.push(pathname + `/newdevice`) }}>
-                    <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADD DEVICE</p>
-                </button>*/}
             </div>
+            <button className='flex justify-center my-10' onClick={() => { router.push(pathname + `/newdevice`) }}>
+                <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADICIONAR DISPOSITIVO</p>
+            </button>
 
             <div className='flex justify-center mt-10'>
                 {
                     devices == null ?
-                        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role='alert'>
+                        <div className="mt-40 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role='alert'>
                             No devices found
                         </div>
                         :

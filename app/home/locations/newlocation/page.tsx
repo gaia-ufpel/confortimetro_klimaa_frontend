@@ -1,16 +1,17 @@
 "use client";
 import React, { useState } from 'react'
 import api from '@/app/api';
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LocationSchema, TLocationSchema } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+import { dotSpinner } from 'ldrs';
 
 const page = () => {
     const { toast } = useToast();
     const router = useRouter();
-    const pathname = usePathname();
+    dotSpinner.register();
 
     const postLocation = async (data: TLocationSchema) => {
         try {
@@ -57,7 +58,7 @@ const page = () => {
                         <label className='font-mono text-xl font-semibold'>ID:</label>
                         <input
                             placeholder='ID'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             {...register('id', { required: true })}
                             disabled={isSubmitting}
                         />
@@ -67,7 +68,7 @@ const page = () => {
                         <label className='font-mono text-xl font-semibold'>Campus:</label>
                         <input
                             placeholder='Campus'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             {...register('campus', { required: true })}
                             disabled={isSubmitting}
                         />
@@ -77,7 +78,7 @@ const page = () => {
                         <label className='font-mono text-xl font-semibold'>Building:</label>
                         <input
                             placeholder='Building'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             {...register('building', { required: true })}
                             disabled={isSubmitting}
                         />
@@ -87,7 +88,7 @@ const page = () => {
                         <label className='font-mono text-xl font-semibold'>Room:</label>
                         <input
                             placeholder='Room'
-                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none'
+                            className='pl-4 pr-4 w-80 h-12 bg-zinc-300 rounded-xl shadow-md outline-none disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                             {...register('room', { required: true })}
                             disabled={isSubmitting}
                         />
@@ -95,11 +96,17 @@ const page = () => {
                     </div>
                     <button
                         type="submit"
-                        className='px-10 py-2 rounded-xl text-white bg-purple-600 hover:bg-purple-700 shadow-md font-bold text-xl'
+                        className='px-10 py-2 rounded-xl text-white bg-purple-600 hover:bg-purple-700 shadow-md font-bold text-xl disabled:opacity-50 disabled:pointer-blocked disabled:cursor-not-allowed'
                         disabled={isSubmitting}
                     >
                         Registrar Localidade
                     </button>
+                    {
+                        isSubmitting &&
+                        <div className='flex justify-center'>
+                            <l-dot-spinner size="50" speed={0.9} color={'black'} />
+                        </div>
+                    }
                 </form>
             </div>
         </div >
