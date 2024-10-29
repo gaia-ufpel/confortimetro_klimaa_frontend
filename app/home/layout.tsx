@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -10,22 +9,20 @@ import { MdLogout } from "react-icons/md";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { IoLocationSharp } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
-import { navigate } from "../login/actions";
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     let router = useRouter();
-    let pathname = usePathname();
     const [openNavbar, setOpenNavbar] = useState(true);
 
     const handleLogout = () => {
-        localStorage.removeItem('token'); // Remove o token do localStorage
-        navigate('/login'); // Redireciona para a página de login
+        localStorage.removeItem('token');
+        router.push('/login');
     };
     return (
         <div className='relative min-h-screen min-w-screen bg-gradient-to-b from-[#41D271] to-[#BD95EB]'>
             {children}
-            <nav className={`absolute p-1 top-0 bottom-0 flex flex-col justify-between items-center z-10 bg-slate-200 ${openNavbar ? "translate-x-0" : "translate-x-[-40px]"} duration-500`}>
+            <nav className={`fixed p-1 top-0 bottom-0 flex flex-col justify-between items-center z-10 bg-slate-200 ${openNavbar ? "translate-x-0" : "translate-x-[-40px]"} duration-500`}>
                 <BsArrowLeftShort className={`absolute top-9 -right-3 border border-black bg-white rounded-full cursor-pointer text-2xl ${!openNavbar && "rotate-180"} duration-200`} onClick={() => setOpenNavbar(!openNavbar)} />
                 <Link href={`/home/profile`} title="Profile">
                     <CgProfile className="w-[30px] h-[30px] hover:text-slate-400"></CgProfile>

@@ -28,6 +28,15 @@ export const dummyDevices: TDeviceSchema[] = [
     { id: 5, serial_number: 'SN005', model: 'Model E', location_id: 1 },
 ];
 
+export const dummyUser: User = {
+    id: 4,
+    name: 'Carlos Silva',
+    email: 'carlos.silva@example.com',
+    password: 'Password123!',
+    group: 'student',
+    is_active: true,
+    is_admin: true,
+};
 interface SensorData {
     id: number;
     location_id: number;
