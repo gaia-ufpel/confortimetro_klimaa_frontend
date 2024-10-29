@@ -1,19 +1,18 @@
 "use client";
-
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { DeviceSchema, TDeviceSchema } from '@/lib/types';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '@/hooks/use-toast';
-import { dotSpinner } from 'ldrs';
+
 import api from '@/app/api';
 
 
 const Page = () => {
     const { toast } = useToast();
     const router = useRouter();
-    dotSpinner.register();
+
 
     const postDevice = async (data: TDeviceSchema) => {
         try {
@@ -110,12 +109,6 @@ const Page = () => {
                     >
                         Registrar dispositivo
                     </button>
-                    {
-                        isSubmitting &&
-                        <div className='flex justify-center'>
-                            <l-dot-spinner size="50" speed={0.9} color={'black'} />
-                        </div>
-                    }
                 </form>
             </div>
         </div>

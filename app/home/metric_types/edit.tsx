@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { TnewMetricTypeSchema, newMetricTypeSchema } from '@/lib/types';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,10 +18,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { ring2 } from 'ldrs';
 
 const Edit = ({ metricType }: { metricType: TnewMetricTypeSchema }) => {
-    ring2.register();
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<TnewMetricTypeSchema>({
         resolver: zodResolver(newMetricTypeSchema),
         defaultValues: metricType,
@@ -67,12 +65,6 @@ const Edit = ({ metricType }: { metricType: TnewMetricTypeSchema }) => {
                         <Button type="submit" disabled={isSubmitting}>
                             Salvar
                         </Button>
-                        {
-                            isSubmitting &&
-                            <div className='justify-self-center self-center'>
-                                <l-ring-2 size={20} stroke={2}></l-ring-2>
-                            </div>
-                        }
                     </DialogFooter>
                 </form>
             </DialogContent>

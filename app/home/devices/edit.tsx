@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+"use client";
+import React from 'react'
 import { TDeviceSchema, DeviceSchema } from '@/lib/types';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,10 +19,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { ring2 } from 'ldrs';
 
 const Edit = ({ device }: { device: TDeviceSchema }) => {
-    ring2.register();
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<TDeviceSchema>({
         resolver: zodResolver(DeviceSchema),
         defaultValues: device,
@@ -74,12 +73,6 @@ const Edit = ({ device }: { device: TDeviceSchema }) => {
                         <Button type="submit" disabled={isSubmitting}>
                             Salvar
                         </Button>
-                        {
-                            isSubmitting &&
-                            <div className='justify-self-center self-center'>
-                                <l-ring-2 size={20} stroke={2}></l-ring-2>
-                            </div>
-                        }
                     </DialogFooter>
                 </form>
             </DialogContent>

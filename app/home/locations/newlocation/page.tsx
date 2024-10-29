@@ -1,17 +1,15 @@
 "use client";
-import React, { useState } from 'react'
+import React from 'react'
 import api from '@/app/api';
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LocationSchema, TLocationSchema } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { dotSpinner } from 'ldrs';
 
 const page = () => {
     const { toast } = useToast();
     const router = useRouter();
-    dotSpinner.register();
 
     const postLocation = async (data: TLocationSchema) => {
         try {
@@ -101,12 +99,7 @@ const page = () => {
                     >
                         Registrar Localidade
                     </button>
-                    {
-                        isSubmitting &&
-                        <div className='flex justify-center'>
-                            <l-dot-spinner size="50" speed={0.9} color={'black'} />
-                        </div>
-                    }
+
                 </form>
             </div>
         </div >

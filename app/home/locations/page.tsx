@@ -11,8 +11,8 @@ const poppins = Poppins({
   subsets: ['latin'],
   weight: ["400"],
 });
-import RefreshButton from '@/app/refresh_button';
-import RemoveDialog from '@/app/_components/RemoveDialog';
+import RefreshButton from '@/lib/refresh_button';
+import RemoveDialog from '@/lib/RemoveDialog';
 
 const Locations = () => {
   const { toast } = useToast();

@@ -6,7 +6,7 @@ import { fetchMetricTypes } from '@/lib/shared_fetchers';
 import { Metric } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import Edit from './edit';
-import RemoveDialog from '@/app/_components/RemoveDialog';
+import RemoveDialog from '@/lib/RemoveDialog';
 
 import { Poppins } from 'next/font/google';
 const poppins = Poppins({

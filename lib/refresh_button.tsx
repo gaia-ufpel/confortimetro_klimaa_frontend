@@ -1,4 +1,3 @@
-import React from 'react'
 import { TbRefresh } from "react-icons/tb";
 
 const RefreshButton = ({ applyWhenClick }: { applyWhenClick: Function }) => {

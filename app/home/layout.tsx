@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { BsInfoCircle } from "react-icons/bs";
 import { TbActivityHeartbeat } from "react-icons/tb";
 import { FaTowerBroadcast } from "react-icons/fa6"; 
@@ -9,16 +9,13 @@ import { MdLogout } from "react-icons/md";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { IoLocationSharp } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
+import { logout } from "@/lib/actions";
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     let router = useRouter();
     const [openNavbar, setOpenNavbar] = useState(true);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        router.push('/login');
-    };
     return (
         <div className='relative min-h-screen min-w-screen bg-gradient-to-b from-[#41D271] to-[#BD95EB]'>
             {children}
@@ -27,7 +24,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Link href={`/home/profile`} title="Profile">
                     <CgProfile className="w-[30px] h-[30px] hover:text-slate-400"></CgProfile>
                 </Link>
-                { /* <Image src={"/login.png"} alt="Homepage" width={30} height={30}></Image> */}
                 <div className="flex flex-col items-center space-y-2">
                     <Link href="/home/metrics">
                         <button className="p-2 border-2 hover:border-black rounded border-transparent transition duration-300" title="metrics">
@@ -50,7 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         </button>
                     </Link>
                 </div>
-                <button onClick={handleLogout} title="Sign out">
+                <button onClick={() => logout()} title="Sign out">
                     <MdLogout className="w-[20px] h-[20px] hover:text-slate-400" />
                 </button>
             </nav>

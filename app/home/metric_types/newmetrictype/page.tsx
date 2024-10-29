@@ -1,19 +1,16 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { newMetricTypeSchema, TnewMetricTypeSchema } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import api from '@/app/api';
-import TimedPopup from '@/app/timed_popup';
 import { useToast } from '@/hooks/use-toast';
-import { dotSpinner } from 'ldrs';
 
 
 const Page = () => {
     const router = useRouter();
     const { toast } = useToast();
-    dotSpinner.register();
 
     const postMetricType = async (data: TnewMetricTypeSchema) => {
         try {
@@ -93,12 +90,6 @@ const Page = () => {
                     >
                         Registrar Tipo de Métrica
                     </button>
-                    {
-                        isSubmitting &&
-                        <div className='flex justify-center'>
-                            <l-dot-spinner size="50" speed={0.9} color={'black'} />
-                        </div>
-                    }
                 </form>
             </div>
         </div>

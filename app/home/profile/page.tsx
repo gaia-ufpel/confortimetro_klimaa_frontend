@@ -6,6 +6,7 @@ import { User } from '@/lib/types';
 
 const page = () => {
     const router = useRouter();
+    const pathname = usePathname();
     const [userInfo, setUserInfo] = useState<User | null>(null);
 
     useEffect(() => {
@@ -15,25 +16,35 @@ const page = () => {
     }, []);
 
     return (
-        <div className='flex relative justify-center items-center min-h-screen min-w-screen bg-gray-100'>
-            <button className='absolute right-0 top-0 mt-10 mr-10' onClick={() => { router.back() }}>
+        <div className='relative flex flex-col space-y-5 '>
+            <button className='absolute right-0 top-0 mt-2 mr-2' onClick={() => { router.back() }}>
                 <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded">Voltar</p>
             </button>
             {
-                userInfo ?
-                    userInfo?.group === 'admin' ?
-                        <button className='absolute right-0 bottom-0 mt-10 mr-10' onClick={() => { router.push('/edit_user') }}>
-                            <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded">Editar Usuários</p>
-                        </button>
-                        : ("") : ("")
+                userInfo &&
+                <div className="bg-white bg-opacity-85 shadow-lg rounded-lg p-10 space-y-5 m-12 lg:m-20">
+                    <h2 className="text-xl font-semibold mb-2 text-clip">Olá, {userInfo?.name}</h2>
+                    <p className="text-gray-700 mb-2"><strong>Email: </strong>{userInfo?.email}</p>
+                    <p className="text-gray-700"><strong>Grupo: </strong>{userInfo?.group}</p>
+                    {
+                        userInfo?.is_active ?
+                            <p className="text-green-500">Esta conta está ativa</p>
+                            :
+                            <p className="text-red-500">Esta conta está inativa</p>
+                    }
+                    {
+                        userInfo?.is_admin &&
+                        <p className="text-red-500">Esta conta tem privilégios de administrador</p>
+                    }
+                </div>
             }
             {
                 userInfo &&
-                <div className="bg-white shadow-lg rounded-lg p-6 max-w-sm w-full">
-                    <p className="text-xl font-semibold mb-2">Nome: {userInfo?.name}</p>
-                    <p className="text-gray-700 mb-2">Email: {userInfo?.email}</p>
-                    <p className="text-gray-700">Grupo: {userInfo?.group}</p>
-                </div>
+                    userInfo?.is_admin == true ?
+                    <button className='flex justify-center' onClick={() => { router.push(pathname+`/edit_user`) }}>
+                        <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded">Editar Usuários</p>
+                    </button>
+                    : ("")
             }
         </div>
     )

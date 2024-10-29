@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+export const loginSchema = z.object({
+  email: z.string().email("E-mail inválido"),
+  password: z.string().min(1, "O campo não pode estar vazio"),
+});
+
+export type TloginSchema = z.infer<typeof loginSchema>;
+
 export const signupSchema = z.object({
   name: z.string().max(50, "Nome deve ter no máximo 50 caracteres"),
   email: z.string().email("E-mail inválido"),

@@ -1,24 +1,23 @@
 "use client";
 import React, { useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link'
 import api from '@/app/api';
 import { getDevices } from '@/lib/shared_fetchers';
 import { Device } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import Edit from './edit';
-import RemoveDialog from '@/app/_components/RemoveDialog';
+import RemoveDialog from '@/lib/RemoveDialog';
 import { Poppins } from 'next/font/google';
-import RefreshButton from '@/app/refresh_button';
+import RefreshButton from '@/lib/refresh_button';
+
 const poppins = Poppins({
     subsets: ['latin'],
     weight: ["400"],
 });
 
-export default function DEVICES() {
+function Page() {
     const { toast } = useToast();
     const [devices, setDevices] = useState<Device[] | null>(null)
-    const pathname = usePathname();
-    const router = useRouter();
 
     const removeDevice = async (id: number) => {
         try {
@@ -39,9 +38,11 @@ export default function DEVICES() {
             <div className='absolute top-0 right-0 md:mt-10 md:mr-10'>
                 <RefreshButton applyWhenClick={() => getDevices().then(data => setDevices(data))} />
             </div>
-            <button className='flex justify-center my-10' onClick={() => { router.push(pathname + `/newdevice`) }}>
-                <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADICIONAR DISPOSITIVO</p>
-            </button>
+            <Link href={`/home/devices/newdevice`} className='flex justify-center my-10'>
+                <button>
+                    <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADICIONAR DISPOSITIVO</p>
+                </button>
+            </Link>
 
             <div className='flex justify-center mt-10'>
                 {
@@ -72,3 +73,5 @@ export default function DEVICES() {
         </div>
     )
 }
+
+export default Page

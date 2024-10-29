@@ -88,3 +88,25 @@ export const getUserInfo = async () => {
         console.log(e);
     }
 }
+
+
+
+export const fetchlogin = async (credentials: { email: string, password: string }) => {
+    const Cookies = require('js-cookie');
+    try {
+        const response = await api.post(`/auth/login`, credentials, {
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': '*/*',
+            }
+        });
+        const data = JSON.parse(response.data);
+        const token = data.Authorization.split(' ')[1];
+        api.defaults.headers.Authorization = token;
+        
+        return {auth: false, token: token};
+    } catch (error: any) {
+        console.error('Erro:', error);
+        return {auth: true, token: ''};
+    }
+};
