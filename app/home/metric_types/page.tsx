@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
 import api from '@/app/api';
 import { fetchMetricTypes } from '@/lib/shared_fetchers';
 import { Metric } from '@/lib/types';
@@ -17,8 +17,6 @@ const poppins = Poppins({
 const MetricTypes = () => {
   const { toast } = useToast();
   const [metricTypes, setMetricTypes] = useState<Metric[] | null>(null);
-  const pathname = usePathname();
-  const router = useRouter();
 
   const removeMetricType = async (id: number) => {
     try {
@@ -40,9 +38,11 @@ const MetricTypes = () => {
     <div className='relative flex flex-col'>
       <h1 className={`${poppins.className} text-3xl font-bold mt-4 md:mt-10 text-center`}>Tipos de métricas</h1>
 
-      <button className='flex justify-center my-10' onClick={() => { router.push(pathname + `/newmetrictype`) }}>
-        <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADD METRIC TYPE</p>
-      </button>
+      <div className='my-10 text-center'>
+        <Link href={`/home/metric_types/newmetrictype`} className='bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded'>
+          ADICIONAR TIPO
+        </Link>
+      </div>
 
       <div className='flex justify-center mt-10'>
         {metricTypes == null ?

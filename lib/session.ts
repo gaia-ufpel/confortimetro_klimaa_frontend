@@ -48,3 +48,8 @@ export async function createSession(userparam: string, token: string) {
     });
 
 }
+
+export async function deleteSession() {
+    cookies().delete("session");
+    cookies().delete("token");
+}

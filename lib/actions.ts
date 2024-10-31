@@ -3,7 +3,7 @@ import { loginSchema } from "./types";
 import { fetchlogin } from "./shared_fetchers";
 import { createSession } from "./session";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { deleteSession } from "./session";
 
 export async function login(prevState: any, formData: FormData) {
     const result = loginSchema.safeParse(Object.fromEntries(formData));
@@ -30,7 +30,6 @@ export async function login(prevState: any, formData: FormData) {
 }
 
 export async function logout() {
-    cookies().delete("session");
-    cookies().delete("token");
+    await deleteSession();
     redirect("/login");
 }

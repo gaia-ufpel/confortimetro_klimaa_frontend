@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import api from '@/app/api';
 import { getDevices } from '@/lib/shared_fetchers';
@@ -8,7 +8,6 @@ import { useToast } from '@/hooks/use-toast';
 import Edit from './edit';
 import RemoveDialog from '@/lib/RemoveDialog';
 import { Poppins } from 'next/font/google';
-import RefreshButton from '@/lib/refresh_button';
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -17,7 +16,11 @@ const poppins = Poppins({
 
 function Page() {
     const { toast } = useToast();
-    const [devices, setDevices] = useState<Device[] | null>(null)
+    const [devices, setDevices] = useState<Device[] | null>()
+
+    useEffect(() => {
+        getDevices().then(data => setDevices(data));
+    }, []);
 
     const removeDevice = async (id: number) => {
         try {
@@ -35,14 +38,11 @@ function Page() {
         <div className='relative flex flex-col'>
             <h1 className={`${poppins.className} text-3xl font-bold mt-4 md:mt-10 text-center`}>Dispositivos</h1>
 
-            <div className='absolute top-0 right-0 md:mt-10 md:mr-10'>
-                <RefreshButton applyWhenClick={() => getDevices().then(data => setDevices(data))} />
+            <div className='my-10 text-center'>
+                <Link href={`/home/devices/newdevice`} className='bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded'>
+                    ADICIONAR DISPOSITIVO
+                </Link>
             </div>
-            <Link href={`/home/devices/newdevice`} className='flex justify-center my-10'>
-                <button>
-                    <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADICIONAR DISPOSITIVO</p>
-                </button>
-            </Link>
 
             <div className='flex justify-center mt-10'>
                 {
@@ -51,12 +51,14 @@ function Page() {
                             No devices found
                         </div>
                         :
-                        <div className='grid md:grid md:grid-cols-2 lg:grid-cols-4 mx-10 md:mx-32'>
+                        <div className='flex flex-wrap justify-center mx-10 md:mx-32'>
                             {
                                 devices.map((value) => (
                                     <div className='relative flex flex-col bg-white text-black font-montserrat border border-gray-300 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none focus:outline-none focus:shadow-outline' key={value.id}>
                                         <div className='font-bold'>{value.serial_number}</div>
-                                        <p>{value.model} - ID: {value.location_id}</p>
+                                        <p>Modelo: {value.model}</p>
+                                        <p>ID: {value.id}</p>
+                                        <p>Location ID:{value.location_id}</p>
                                         <div className='grid space-y-2 m-3'>
                                             <RemoveDialog applyWhenRemove={() => removeDevice(value.id)}
                                                 trigger='Remover Dispositivo'

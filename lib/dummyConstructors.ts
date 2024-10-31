@@ -18,6 +18,13 @@ export const dummyLocations: TLocationSchema[] = [
     { id: 5, campus: 'Campus 5', building: 'Building 5', room: 'Room 5' },
     { id: 6, campus: 'Campus 6', building: 'Building 6', room: 'Room 6' },
     { id: 7, campus: 'Campus 7', building: 'Building 7', room: 'Room 7' },
+    { id: 8, campus: 'Campus 1', building: 'Building 1', room: 'Room 1' },
+    { id: 9, campus: 'Campus 2', building: 'Building 2', room: 'Room 2' },
+    { id: 10, campus: 'Campus 3', building: 'Building 3', room: 'Room 3' },
+    { id: 11, campus: 'Campus 4', building: 'Building 4', room: 'Room 4' },
+    { id: 12, campus: 'Campus 5', building: 'Building 5', room: 'Room 5' },
+    { id: 13, campus: 'Campus 6', building: 'Building 6', room: 'Room 6' },
+    { id: 14, campus: 'Campus 7', building: 'Building 7', room: 'Room 7' },
 ];
 
 export const dummyDevices: TDeviceSchema[] = [
@@ -26,6 +33,11 @@ export const dummyDevices: TDeviceSchema[] = [
     { id: 3, serial_number: 'SN003', model: 'Model C', location_id: 2 },
     { id: 4, serial_number: 'SN004', model: 'Model D', location_id: 2 },
     { id: 5, serial_number: 'SN005', model: 'Model E', location_id: 1 },
+    { id: 6, serial_number: 'SN001', model: 'Model A', location_id: 1 },
+    { id: 7, serial_number: 'SN002', model: 'Model B', location_id: 1 },
+    { id: 8, serial_number: 'SN003', model: 'Model C', location_id: 2 },
+    { id: 9, serial_number: 'SN004', model: 'Model D', location_id: 2 },
+    { id: 10, serial_number: 'SN005', model: 'Model E', location_id: 1 },
 ];
 
 export const dummyUser: User = {

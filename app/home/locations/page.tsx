@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { Location } from '@/lib/types';
 import { fetchLocations } from '@/lib/shared_fetchers';
-import { useRouter, usePathname } from 'next/navigation';
 import Edit from './edit';
 import api from '@/app/api';
 import { useToast } from '@/hooks/use-toast';
@@ -11,14 +11,15 @@ const poppins = Poppins({
   subsets: ['latin'],
   weight: ["400"],
 });
-import RefreshButton from '@/lib/refresh_button';
 import RemoveDialog from '@/lib/RemoveDialog';
 
 const Locations = () => {
   const { toast } = useToast();
   const [locations, setLocations] = useState<Location[] | null>(null);
-  const pathname = usePathname();
-  const router = useRouter();
+
+  useEffect(() => {
+    fetchLocations().then(data => setLocations(data));
+  }, []);
 
   const removeLocation = async (id: number) => {
     try {
@@ -36,19 +37,18 @@ const Locations = () => {
     <div className='relative flex flex-col'>
       <h1 className={`${poppins.className} text-3xl font-bold mt-4 md:mt-10 text-center`}>Localidades</h1>
 
-      <div className='absolute top-0 right-0 md:mt-10 md:mr-10'>
-        <RefreshButton applyWhenClick={() => fetchLocations().then(data => setLocations(data))} />
+      <div className='my-10 text-center'>
+        <Link href={`/home/locations/newlocation`} className='bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded'>
+          ADICIONAR LOCALIDADE
+        </Link>
       </div>
-      <button className='flex justify-center my-10' onClick={() => { router.push(pathname + `/newlocation`) }}>
-        <p className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">ADICIONAR LOCALIDADE</p>
-      </button>
 
       <div className='flex justify-center mt-10'>
         {locations == null ?
           <div className="mt-40 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role='alert'>
             No locations found
           </div> :
-          <div className={`flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 mx-10 md:mx-32`}>{
+          <div className={`flex flex-wrap justify-center mx-10 md:mx-32`}>{
             locations.map((location) => (
               <div key={location.id} className='card bg-white shadow-lg rounded-lg p-6 m-4 text-gray-700 font-montserrat'>
                 <h3 className='text-xl font-bold mb-2'>{location.campus}</h3>
