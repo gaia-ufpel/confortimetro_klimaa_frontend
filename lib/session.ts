@@ -6,7 +6,8 @@ const secretKey = process.env.SESSION_SECRET;
 const encondedKey = new TextEncoder().encode(secretKey);
 
 type SessionPayload = {
-    userparam: string;
+    userId: string;
+    userRole: string;
     expiresAt: Date;
 }
 
@@ -32,17 +33,17 @@ export async function decrypt(session: string | undefined = "") {
     }
 }
 
-export async function createSession(userparam: string, token: string) {
+export async function createSession(userId: string, userRole: string, token: string) {
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    
-    const session = await encrypt({ userparam, expiresAt });
-    
+
+    const session = await encrypt({ userId, userRole, expiresAt });
+
     cookies().set("session", session, {
         expires: expiresAt,
         httpOnly: true,
         secure: true,
     });
-    
+
     cookies().set('token', token, {
         expires: expiresAt,
     });
@@ -52,4 +53,10 @@ export async function createSession(userparam: string, token: string) {
 export async function deleteSession() {
     cookies().delete("session");
     cookies().delete("token");
+}
+
+export async function checkUserIsAdmin() {
+    const session = cookies().get("session")?.value;
+    const payload = await decrypt(session);
+    return payload?.userRole === "admin";
 }
